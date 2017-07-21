@@ -13,29 +13,54 @@ const {renderToString} = require('react-dom/server')
 const {StaticRouter} = require('react-router-dom')
 
 // Project
-const wordpressApi = require( './wordpressApi' )
+const wordpressApi = require( '../src/wordpressApi' );
 const {default: configureStore} = require('../src/store')
 const {default: App} = require('../src/containers/App')
 
 // --------------------------------------------------
 // DECLARE FUNCTIONS
 // --------------------------------------------------
-function handleRequest( req, res, filePath ) {
-  fs.readFile(filePath, 'utf8', (err, htmlData)=>{
+function handleAssetRequest( req, res, filePath ) {
+  /// TEMP - End request immediately/without response data.
+  /// TODO[@jrmykolyn] - Update function to *actually* handle request for asset.
+  res.end();
+}
+
+function handlePageRequest( req, res, filePath ) {
+  fs.readFile( filePath, 'utf8', ( err, htmlData ) => {
     if (err) {
       console.error('read err', err)
       return res.status(404).end()
     }
 
+    // Get `wp_head` and `wp_footer` content via `fetchWpActions()`.
     let wpActions = wordpressApi.fetchWpActions();
 
-     Promise.all( [ wpActions ] )
+    // Get page-specific content.
+    let wpContent = wordpressApi.fetchContent( req.url );
+
+     Promise.all( [ wpActions, wpContent ] )
       .then( ( data ) => {
-        var [ actions ] = data;
-        var { wp_head, wp_footer } = JSON.parse( actions );
+        // Extract data from responses.
+        let [ actions, content ] = data;
+        let { wp_head, wp_footer } = JSON.parse( actions.payload );
+        let initialState = {};
+
+        // Attempt to update `initialState` using `content`.
+        try {
+          let { requestType, payload } = content;
+
+          payload = JSON.parse( payload );
+
+          initialState = { [ requestType ]: payload };
+        } catch ( err ) {
+          /// TEMP - If unable to parse 'content payload', end request with generic error message
+          /// TODO[@jrmykolyn] - Figure out alternative method of handling case.
+          res.end( 'Whoops! Something went wrong!' ); /// TEMP
+        }
 
         const context = {}
-        const store = configureStore()
+        const store = configureStore( initialState );
         const markup = renderToString(
           <Provider store={store}>
             <StaticRouter
@@ -61,7 +86,13 @@ function handleRequest( req, res, filePath ) {
           RenderedApp = RenderedApp.replace( '{{WP_HEAD}}', wp_head || '' );
           RenderedApp = RenderedApp.replace( '{{WP_FOOTER}}', wp_footer || '' );
 
-          res.send( RenderedApp )
+          // Replace `__INITIAL_STATE__` placeholder with contents of `initialState`.
+          // Bind data to new window var. (eg. add to global scope).
+          // This allows the client-side application to bootstrap in the correct state.
+          // Without this, the application would either display the default/placeholder data, or make an additional network request.
+          RenderedApp = RenderedApp.replace( '__INITIAL_STATE__', `window.__INITIAL_STATE__ = ${JSON.stringify( initialState )};` || '' );
+
+          res.send( RenderedApp );
         }
       } )
       .catch( ( err ) => {
@@ -76,6 +107,14 @@ function handleRequest( req, res, filePath ) {
 module.exports = function universalLoader(req, res) {
   const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
 
-  // Default response for *all* requests.
-  handleRequest( req, res, filePath );
+  // Handle the following request types:
+  // - 'asset'
+  // - 'page'
+  switch ( req.url.indexOf( '.' ) !== -1 ) {
+    case true:
+      handleAssetRequest( req, res, filePath );
+      break;
+    default:
+      handlePageRequest( req, res, filePath );
+  }
 }

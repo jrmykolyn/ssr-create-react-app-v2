@@ -1,0 +1,12 @@
+footer {
+  width: 100%;
+  color: #FFF;
+  background: #222;
+}
+
+.footer__inner {
+  width: 94%;
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 6rem 0;
+}

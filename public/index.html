@@ -20,6 +20,9 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Server Side Rendering - Create React App</title>
+    <!--
+      `{{WP_HEAD}}` will be replaced with the contents of the `wp_head` function during initial server-side render.
+    -->
     {{WP_HEAD}}
   </head>
   <body>
@@ -37,6 +40,15 @@
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
     -->
+    <!--
+      `{{WP_HEAD}}` will be replaced with the contents of the `wp_head` function during initial server-side render.
+    -->
     {{WP_FOOTER}}
+    <!--
+      `__INITIAL_STATE__` will be replaced with page-specific data compiled by the server on initial render.
+      NOTE:
+      - Wrapping `__INITIAL_STATE__` in `{{ ... }}` results in the entire string being removed during the build/compile step.
+    -->
+    <script>__INITIAL_STATE__</script>
   </body>
 </html>
