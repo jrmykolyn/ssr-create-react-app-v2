@@ -14,6 +14,7 @@ export class Header extends Component {
             <Link to={'/'}>Home</Link>
             <Link to={'/sample-page'}>Sample Page</Link>
             <Link to={'/post/hello-world'}>Sample Post</Link>
+            <Link to={'/category/test'}>Archive Page</Link>
           </nav>
         </div>
       </header>

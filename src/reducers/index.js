@@ -1,13 +1,15 @@
 import { combineReducers } from 'redux';
 
-import user from './user';
+import archive from './archive';
 import home from './home';
 import page from './page';
 import post from './post';
+import user from './user';
 
 export default combineReducers( {
-  user,
+  archive,
   home,
   page,
   post,
+  user,
 } );
