@@ -24,8 +24,16 @@ function fetch( opts={}  ) {
     let request = http.get( options, ( response ) => {
       response.setEncoding('utf8');
 
+      let payload = '';
+
+      // Update `payload` when new data is received.
       response.on( 'data', ( chunk ) => {
-        resolve( { requestType: opts.requestType, payload: chunk } );
+        payload += chunk;
+      } );
+
+      // Resolve Promise when *all* data received.
+      response.on( 'end', () => {
+        resolve( { requestType: opts.requestType, payload: payload } );
       } );
     } );
   } );
