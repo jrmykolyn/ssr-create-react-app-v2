@@ -7,14 +7,18 @@ const http = require( 'http' );
 // Vendor
 const Promise = require( 'bluebird' );
 
+// Config.
+const API_CONFIG = require( './config/api' ); /// TEMP
+const { WORDPRESS_API_CONFIG } = API_CONFIG; /// TEMP
+
 // --------------------------------------------------
 // DECLARE FUNCTIONS
 // --------------------------------------------------
 function fetch( opts={}  ) {
   return new Promise( ( resolve, reject ) => {
     let options = {
-      hostname: 'localhost',
-      path: `/_tests/_wordpress-api/wp-json/wp/v2/${opts.endpoint}`,
+      hostname: `${WORDPRESS_API_CONFIG.hostname}`,
+      path: `/${WORDPRESS_API_CONFIG.path}/${WORDPRESS_API_CONFIG.api}/${opts.endpoint}`,
     };
 
     let request = http.get( options, ( response ) => {
