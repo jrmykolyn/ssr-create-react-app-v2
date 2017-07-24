@@ -4,25 +4,49 @@ import { Link } from 'react-router-dom'
 
 import './Menu.css'
 
-function parseWpLink( link ) {
-  link = ( link && typeof link === 'string' ) ? link : '';
+const API_CONFIG = require( '../../config/api' ); /// TEMP
+const { WORDPRESS_API_CONFIG } = API_CONFIG; /// TEMP
 
-  if ( !link ) {
+function parseWpLink( link ) {
+  let data = {
+    isExternal: ( link.object === 'custom' ),
+    parsedUrl: parseWpLinkUrl( link.url || '' ),
+  }
+
+  return { ...link, ...data };
+}
+
+function parseWpLinkUrl( url ) {
+  url = ( url && typeof url === 'string' ) ? url : '';
+
+  if ( !url ) {
     return '/';
   }
 
-  /// TODO[@jrmykolyn]
-  // - Remove API portion of URL
-  // - Determine 'type' of request (eg. `page`, `post`, etc.).
-  // - Return result.
+  // Remove WordPress portion of URL.
+  let pattern = new RegExp( `https?://${WORDPRESS_API_CONFIG.hostname}/${WORDPRESS_API_CONFIG.path}`, 'gmi' );
+  let parsedUrl = url.replace( pattern, '' );
+
+  // Determine 'type' of request (eg. `page`, `post`, etc.).
+  /// TODO
+
+  return parsedUrl;
 }
 
 export class Menu extends Component {
   render() {
     let links = this.props.data.map( ( link, i ) => {
-      return (
-        <Link key={ i } to={ link.url || '/' }>{ link.title || 'Fallback' }</Link>
-      );
+      let linkData = parseWpLink( link );
+
+      if ( linkData.isExternal ) {
+        return (
+          <a key={ i } href={ linkData.url }>{ link.title || '' }</a>
+        );
+      } else {
+        return (
+          <Link key={ i } to={ linkData.parsedUrl || '/' }>{ link.title || '' }</Link>
+        );
+      }
     } );
 
     return(
