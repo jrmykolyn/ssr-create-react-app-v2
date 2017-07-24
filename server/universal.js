@@ -39,20 +39,29 @@ function handlePageRequest( req, res, filePath ) {
     // Get page-specific content.
     let wpContent = wordpressApi.fetchContent( req.url );
 
-     Promise.all( [ wpActions, wpContent ] )
+    // Get menus.
+    let wpMenus = wordpressApi.fetchMenus();
+
+     Promise.all( [ wpActions, wpContent, wpMenus ] )
       .then( ( data ) => {
-        // Extract data from responses.
-        let [ actions, content ] = data;
+        // Destructure response `data`.
+        let [ actions, content, menus ] = data;
+
+        // Extract markup from `actions`
         let { wp_head, wp_footer } = JSON.parse( actions.payload );
+
+        // Initialize `initialState` object.
+        // Object will be updated below.
         let initialState = {};
 
-        // Attempt to update `initialState` using `content`.
+        // Attempt to update `initialState`.
         try {
-          let { requestType, payload } = content;
-
-          payload = JSON.parse( payload );
-
-          initialState = { [ requestType ]: payload };
+          initialState = {
+            app: {
+              menus: ( menus && menus.payload && menus.payload.length ) ? JSON.parse( menus.payload ) : [], /// TEMP
+            },
+            [ content.requestType ]: JSON.parse( content.payload ),
+          };
         } catch ( err ) {
           /// TEMP - If unable to parse 'content payload', end request with generic error message
           /// TODO[@jrmykolyn] - Figure out alternative method of handling case.

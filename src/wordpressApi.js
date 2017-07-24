@@ -41,6 +41,10 @@ export function fetchContent( url = '' ) {
   }
 }
 
+export function fetchMenus() {
+  return fetch( { requestType: 'menus', endpoint: `x/menus` } )
+}
+
 export function fetchHomePage() {
   return fetch( { requestType: 'home', endpoint: `x/frontpage` } );
 }
