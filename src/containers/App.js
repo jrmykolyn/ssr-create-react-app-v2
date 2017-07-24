@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withRouter } from 'react-router';
 import { Switch, Route } from 'react-router-dom'
 
 import Home from './Home';
@@ -68,7 +69,11 @@ const mapDispatchToProps = ( dispatch ) => ( {
   appActions: bindActionCreators( appActions, dispatch )
 } );
 
-export default connect(
+// NOTE:
+// - Exporting `App` component via `connect()` prevents URL location change from rendering new components.
+// - Fix is to to wrap `connect( ... )` call in `withRouter( ... )`.
+// - Fix taken from: https://github.com/ReactTraining/react-router/issues/4671.
+export default withRouter( connect(
   mapStateToProps,
   mapDispatchToProps
-)( App )
+)( App ) );
