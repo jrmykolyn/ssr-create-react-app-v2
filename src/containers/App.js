@@ -15,20 +15,20 @@ import * as appActions from '../actions/app';
 
 import * as wordpressApi from '../wordpressApi';
 
+// Config.
+const CONFIG = require( '../config/' ); // NOTE - Trailing `/` required so that `require( ... )` imports `src/config/index.js`, *NOT* `src/config.js`... Fix this!
+const { MENU_CONFIG } = CONFIG;
+
 class App extends Component {
   render() {
     let menuData = [];
 
-    /// TEMP
     try {
-      console.log( 'UPDATING `menuData`' ); /// TEMP
-
       // NOTE:
-      // - `menus` should be a two dimensional array.
-      // - If item at index 0 does not exist, fallback to empty array.
-      menuData = this.props.app.menus[ 0 ] || [];
+      // `menus` should be an object, where the value @ each key is an array of menu items.
+      menuData = this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] || [];
     } catch ( err ) {
-      /// TODO[@jrmykolyn] - Handle error.
+      /// TODO[@jrmykolyn] - Handle error... or don't?
     }
 
     return (
@@ -47,8 +47,8 @@ class App extends Component {
   }
 
   componentWillMount() {
-    if ( !this.props.staticContext && ( !this.props.app || !this.props.app.menus || !this.props.app.menus.length ) ) {
-      this.wordpressApi.fetchMenus()
+    if ( !this.props.staticContext && ( !this.props.app || !this.props.app.menus || !this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] ) ) {
+      wordpressApi.fetchMenus()
         .then( ( response ) => {
           return JSON.parse( response.payload );
         } )
