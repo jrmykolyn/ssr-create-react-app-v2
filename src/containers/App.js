@@ -47,17 +47,18 @@ class App extends Component {
   }
 
   componentWillMount() {
-    /// TODO[@jrmykolyn] - Prevent additional network request if menu data present in `__INITIAL_STATE__`.
-    wordpressApi.fetchMenus()
-      .then( ( response ) => {
-        return JSON.parse( response.payload );
-      } )
-      .then( ( payload ) => {
-        this.props.appActions.updateMenus( payload );
-      } )
-      .catch( ( err ) => {
-        console.log( err ); /// TEMP
-      } );
+    if ( !this.props.staticContext && ( !this.props.app || !this.props.app.menus || !this.props.app.menus.length ) ) {
+      this.wordpressApi.fetchMenus()
+        .then( ( response ) => {
+          return JSON.parse( response.payload );
+        } )
+        .then( ( payload ) => {
+          this.props.appActions.updateMenus( payload );
+        } )
+        .catch( ( err ) => {
+          console.log( err ); /// TEMP
+        } );
+    }
   }
 }
 
