@@ -14,13 +14,30 @@ class Page extends Component {
   }
 
   render() {
+    let slug = '';
+    let page = {};
+
+    // ...
+    try {
+      // ...
+      slug = this.props.match.params.slug;
+
+      // ...
+      page = Object.keys( this.props.page )
+        .filter( ( pageSlug ) => { return pageSlug === slug; } )
+        .map( ( pageSlug ) => { return this.props.page[ pageSlug ]; } )
+        .reduce( ( a, b ) => { return { ...a, ...b }; }, {} );
+    } catch ( err ) {
+      /// TODO
+    }
+
     return (
       <main>
         <section className="post-header">
-          <h1>{ this.props.page.post_title }</h1>
+          <h1>{ page.post_title }</h1>
         </section>
         <section className="post-body">
-          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: this.props.page.post_content } }>
+          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
           </div>
         </section>
         <section className="post-footer"></section>
@@ -29,13 +46,10 @@ class Page extends Component {
   }
 
   componentWillMount() {
-    if ( !this.props.staticContext && ( !this.props.page.ID || this.props.page.post_name !== this.props.match.params.slug ) ) {
+    if ( !this.props.staticContext && ( !this.props.page || !this.props.page[ this.props.match.params.slug ] ) ) {
       wordpressApi.fetchPageBySlug( this.props.match.params.slug )
         .then( ( response ) => {
-          return JSON.parse( response.payload );
-        } )
-        .then( ( response ) => {
-          this.props.pageActions.update( response );
+          this.props.pageActions.update( JSON.parse( response.payload ), response.slug );
         } )
         .catch( ( err ) => {
           console.log( err ); /// TEMP

@@ -11,22 +11,13 @@ import './Single.css'
 class Single extends Component {
   constructor() {
     super();
-
-    console.log( 'INSIDE `Single#constructor()` --> LOGGING OUT `this`' ); /// TEMP
-    console.log( this ); /// TEMP
   }
 
   componentWillMount() {
-    console.log( 'INSIDE `Single#componentWillMount()`' ); /// TEMP
-    console.log( this );
-
-    if ( !this.props.staticContext && ( !this.props.post.ID || this.props.post.post_name !== this.props.match.params.slug ) ) {
+    if ( !this.props.staticContext && ( !this.props.post || !this.props.post[ this.props.match.params.slug ] ) ) {
       wordpressApi.fetchPostBySlug( this.props.match.params.slug )
         .then( ( response ) => {
-          return JSON.parse( response.payload );
-        } )
-        .then( ( response ) => {
-          this.props.postActions.update( response );
+          this.props.postActions.update( JSON.parse( response.payload ), response.slug );
         } )
         .catch( ( err ) => {
           console.log( err ); /// TEMP
@@ -35,13 +26,31 @@ class Single extends Component {
   }
 
   render() {
+    let slug = '';
+    let post = {};
+
+    // ...
+    try {
+      // ...
+      slug = this.props.match.params.slug;
+
+      // ...
+      post = Object.keys( this.props.post )
+        .filter( ( postSlug ) => { return postSlug === slug; } )
+        .map( ( postSlug ) => { return this.props.post[ postSlug ]; } )
+        .reduce( ( a, b ) => { return { ...a, ...b }; }, {} );
+    } catch ( err ) {
+      /// TODO
+    }
+
+    // ...
     return (
       <main>
         <section className="post-header">
-          <h1>{ this.props.post.post_title }</h1>
+          <h1>{ post.post_title }</h1>
         </section>
         <section className="post-body">
-          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: this.props.post.post_content } }>
+          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
           </div>
         </section>
         <section className="post-footer"></section>
