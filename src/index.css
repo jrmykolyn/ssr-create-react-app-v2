@@ -14,14 +14,15 @@ html {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 300;
   font-size: 62.5%;
-  text-align: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  color: #222;
   background: #FAFAFA;
   font-size: 1.6rem;
+  line-height: 1.6;
 }
 
 body * {
@@ -30,7 +31,34 @@ body * {
 
 main {
   width: 94%;
-  max-width: 96rem;
+  max-width: 70rem;
   margin: 0 auto;
   padding: 3rem 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.3;
+}
+
+a {
+  color: #222;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  color: #444;
+}
+
+figure {
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
 }
