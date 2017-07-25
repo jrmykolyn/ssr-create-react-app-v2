@@ -12,15 +12,15 @@ export class PostPreview extends Component {
 
     return(
       <article className="post-preview">
-        <div className="post-preview-header">
+        <div className="post-preview__header">
           <h2>
-            <Link to={`/category/${categorySlug}`}>{ categorySlug }</Link>
+            <Link to={`/category/${categorySlug}`} dangerouslySetInnerHTML={ { __html: categorySlug } }></Link>
           </h2>
           <h1>
             <Link to={ `/${categorySlug}/${postSlug}`}>{ postTitle }</Link>
           </h1>
         </div>
-        <div className="post-preview-body" dangerouslySetInnerHTML={ { __html: this.props.data.post_content || '' } }>
+        <div className="post-preview__body" dangerouslySetInnerHTML={ { __html: this.props.data.post_excerpt || '' } }>
         </div>
       </article>
     );

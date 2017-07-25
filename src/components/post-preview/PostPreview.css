@@ -1,0 +1,32 @@
+.post-preview {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #FFF;
+  box-shadow: 0rem 0.3rem 2rem -0.3rem rgba( 0, 0, 0, 0.2 );
+  padding: 2rem;
+  font-size: 1.6rem;
+}
+
+.post-preview:not( :last-child ) {
+  margin-bottom: 2rem;
+}
+
+.post-preview__header {
+
+}
+
+.post-preview__header h1 {
+  font-size: 1.5em;
+}
+
+.post-preview__header h2 {
+  margin-bottom: 1rem;
+
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.post-preview__footer {
+
+}
