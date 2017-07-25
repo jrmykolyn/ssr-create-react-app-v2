@@ -30,7 +30,7 @@ function parseWpLinkUrl( url ) {
   // Determine 'type' of request (eg. `page`, `post`, etc.).
   /// TODO
 
-  return parsedUrl;
+  return ( parsedUrl.substring( 0, 1 ) === '/' ) ? parsedUrl : `/${parsedUrl}`;
 }
 
 export class Menu extends Component {
