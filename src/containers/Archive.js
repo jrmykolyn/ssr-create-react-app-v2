@@ -12,7 +12,7 @@ import * as archiveActions from '../actions/archive'
 import * as wordpressApi from '../wordpressApi';
 
 // Components
-import { PostPreview } from '../components';
+import { PostPreview, Loader } from '../components';
 
 // Styles
 import './Archive.css';
@@ -69,9 +69,12 @@ export class Archive extends Component {
       );
     } );
 
+    // Assign `output` to account for possibility that `posts` does not exist or is invalid.
+    let output = ( Array.isArray( posts ) && posts.length ) ? posts : <Loader />;
+
     return (
       <main>
-        { posts }
+        { output }
       </main>
     );
   }
