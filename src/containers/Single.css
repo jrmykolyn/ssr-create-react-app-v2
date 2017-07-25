@@ -1,0 +1,46 @@
+.post-header {
+  font-size: 2rem;
+}
+
+.post-header h1 {
+  font-size: 2em;
+  line-height: 1.2;
+}
+
+.post-body {
+  padding-top: 2rem;
+  font-size: 1.6rem;
+}
+
+.post-body__inner {
+
+}
+
+.post-body__inner img {
+  /*
+    `*: auto !important` temporarily required in order to override inline WP styles.
+  */
+  width: auto !important;
+  height: auto !important;
+  display: block;
+  margin: 3rem auto;
+}
+
+.post-body__inner figure {
+  margin: 3rem auto;
+}
+
+.post-body__inner figure img {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.post-body__inner figure img + figcaption {
+  margin-top: 2rem;
+  font-size: 0.75em;
+  text-transform: uppercase;
+}
+
+.post-footer {
+
+}
