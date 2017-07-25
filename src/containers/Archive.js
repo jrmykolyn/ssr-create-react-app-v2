@@ -42,10 +42,7 @@ function checkFetch( componentRef ) {
 function getCategoryData( componentRef ) {
   wordpressApi.fetchPostsByCategory( componentRef.props.match.params.slug )
     .then( ( response ) => {
-      return JSON.parse( response.payload );
-    } )
-    .then( ( payload ) => {
-      componentRef.props.archiveActions.update( payload, componentRef.props.match.params.slug );
+      componentRef.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
     } )
     .catch( ( err ) => {
       console.log( err ); /// TEMP
@@ -57,11 +54,13 @@ function getCategoryData( componentRef ) {
 // --------------------------------------------------
 export class Archive extends Component {
   render() {
+    console.log( 'INSIDE `Archive#render()`' ); /// TEMP
+
     // Extract the `archiveType` (eg. the specific category) from the route.
-    let archiveType = this.props.match.params.slug || '';
+    let slug = this.props.match.params.slug || '';
 
     // Extract the correspondng posts from the `archive` data; fall back to empty array.
-    let archivePosts = ( this.props.archive && this.props.archive[ archiveType ] ) ? this.props.archive[ archiveType ] : [];
+    let archivePosts = ( this.props.archive && this.props.archive[ slug ] ) ? this.props.archive[ slug ] : [];
 
     // Map extracted posts to components.
     let posts = archivePosts.map( ( post ) => {
@@ -78,12 +77,16 @@ export class Archive extends Component {
   }
 
   componentWillMount() {
+    console.log( 'INSIDE `Archive#componentWillMount()`' ); /// TEMP
+
     if ( checkFetch( this ) ) {
       getCategoryData( this );
     }
   }
 
   componentDidUpdate( prevProps, prevState ) {
+    console.log( 'INSIDE `Archive#componentDidUpdate()`' ); /// TEMP
+
     /// TODO[@jmykolyn] - Look into whether or not we need to do this in all cases?
     if ( checkFetch( this ) ) {
       getCategoryData( this );

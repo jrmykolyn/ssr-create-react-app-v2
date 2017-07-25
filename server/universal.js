@@ -56,12 +56,26 @@ function handlePageRequest( req, res, filePath ) {
 
         // Attempt to update `initialState`.
         try {
+          // Add `app` key and `menus` data to `initialeState`.
           initialState = {
             app: {
               menus: ( menus && menus.payload && menus.payload.length ) ? JSON.parse( menus.payload ) : [], /// TEMP
             },
-            [ content.requestType ]: JSON.parse( content.payload ),
           };
+
+          // Update `initialState` with cotent.
+          // If `content` includes `slug`:
+            // - Create a new sub-object using `requestType`, `slug`, `payload`.
+          // Else:
+            // - Set the `requestType` equal to the `payload`.
+          if ( content.slug ) {
+            initialState[ content.requestType ] = {
+              [ content.slug ]: JSON.parse( content.payload ),
+            }
+          } else {
+            initialState[ content.requestType ] = JSON.parse( content.payload );
+          }
+
         } catch ( err ) {
           /// TEMP - If unable to parse 'content payload', end request with generic error message
           /// TODO[@jrmykolyn] - Figure out alternative method of handling case.

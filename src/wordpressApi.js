@@ -33,7 +33,11 @@ function fetch( opts={}  ) {
 
       // Resolve Promise when *all* data received.
       response.on( 'end', () => {
-        resolve( { requestType: opts.requestType, payload: payload } );
+        resolve( {
+          requestType: opts.requestType,
+          payload: payload,
+          slug: ( opts.slug || '' ),
+        } );
       } );
     } );
   } );
@@ -43,13 +47,23 @@ export function fetchContent( url = '' ) {
   let pathSegments = url.split( '/' ).filter( ( segment ) => { return !!segment; } );
 
   /// TODO[@jrmykolyn] - This is brittle and probably won't scale to accommodate all WP routes. Look into alternative solutions.
-  /// FIXME[@jrmykolyn] - This already fails if the project includes the following routes: `/:category/:post`; `/category/:category`.
   if ( !pathSegments || !pathSegments.length ) {
+
     return fetchHomePage();
+
   } else if ( pathSegments.length === 1 ) {
+
     return fetchPageBySlug( pathSegments[ 0 ] );
+
   } else if ( pathSegments.length === 2 ) {
-    return fetchPostBySlug( pathSegments[ 1 ] );
+
+    // FIXME[@jmykolyn] - This is gross... Consider creating/reading in a permalinks schema file; responding to requests based on matches.
+    if ( pathSegments[ 0 ] === 'category' ) {
+      return fetchPostsByCategory( pathSegments[ 1 ] );
+    } else {
+      return fetchPostBySlug( pathSegments[ 1 ] );
+    }
+
   }
 }
 
@@ -62,15 +76,15 @@ export function fetchHomePage() {
 }
 
 export function fetchPostsByCategory( slug ) {
-  return fetch( { requestType: 'archive', endpoint: `x/categories/${slug}/posts` } );
+  return fetch( { requestType: 'archive', endpoint: `x/categories/${slug}/posts`, slug: slug } );
 }
 
 export function fetchPageBySlug( slug ) {
-  return fetch( { requestType: 'page', endpoint: `x/pages/${slug}` } );
+  return fetch( { requestType: 'page', endpoint: `x/pages/${slug}`, slug: slug } );
 }
 
 export function fetchPostBySlug( slug ) {
-  return fetch( { requestType: 'post', endpoint: `x/posts/${slug}` } );
+  return fetch( { requestType: 'post', endpoint: `x/posts/${slug}`, slug: slug } );
 }
 
 export function fetchWpActions() {

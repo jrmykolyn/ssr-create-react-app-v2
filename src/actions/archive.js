@@ -1,7 +1,7 @@
-export function update( payload, archiveType ) {
+export function update( payload, slug ) {
   return {
     type: 'ARCHIVE_UPDATE',
-    archiveType: archiveType || '', /// TODO[@jmykolyn] - Consider setting an actual fallback value.
+    slug: slug || '', /// TODO[@jmykolyn] - Consider setting an actual fallback value.
     payload,
   };
 }
