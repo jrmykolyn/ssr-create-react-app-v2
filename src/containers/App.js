@@ -21,19 +21,21 @@ const { MENU_CONFIG } = CONFIG;
 
 class App extends Component {
   render() {
-    let menuData = [];
+    let primaryMenuData = [];
+    let secondaryMenuData = [];
 
     try {
       // NOTE:
       // `menus` should be an object, where the value @ each key is an array of menu items.
-      menuData = this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] || [];
+      primaryMenuData = this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] || [];
+      secondaryMenuData = this.props.app.menus[ MENU_CONFIG.secondary || 'secondary' ] || [];
     } catch ( err ) {
       /// TODO[@jrmykolyn] - Handle error... or don't?
     }
 
     return (
       <div>
-        <Header menuData={ menuData }></Header>
+        <Header primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route path="/category/:slug" component={Archive} />

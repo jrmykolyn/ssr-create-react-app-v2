@@ -18,3 +18,26 @@ nav a:focus {
 nav a:not( :last-child ) {
   margin-right: 1em;
 }
+
+.primary {}
+
+.secondary {
+  width: 100%;
+  height: auto;
+  padding: 1rem;
+  color: #FFF;
+  background: #222;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.secondary a {
+  color: inherit;
+  margin: 0 1em;
+  font-size: 1em;
+}
+
+.secondary a:hover,
+.secondary a:focus {
+  color: #FFF;
+}

@@ -56,6 +56,19 @@ class Page extends Component {
         } );
     }
   }
+
+  componentDidUpdate() {
+    /// TODO[@jmykolyn] - Refactor with body of `componentWillMount()` above. See `Archive.js` for direction.
+    if ( !this.props.staticContext && ( !this.props.page || !this.props.page[ this.props.match.params.slug ] ) ) {
+      wordpressApi.fetchPageBySlug( this.props.match.params.slug )
+        .then( ( response ) => {
+          this.props.pageActions.update( JSON.parse( response.payload ), response.slug );
+        } )
+        .catch( ( err ) => {
+          console.log( err ); /// TEMP
+        } );
+    }
+  }
 }
 
 const mapStateToProps = ( state ) => ( {

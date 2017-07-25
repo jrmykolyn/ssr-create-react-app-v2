@@ -50,7 +50,7 @@ export class Menu extends Component {
     } );
 
     return(
-      <nav>
+      <nav className={ this.props.menuType || 'primary' }>
         { links }
       </nav>
     );
