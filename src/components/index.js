@@ -4,3 +4,4 @@ export * from './loader';
 export * from './menu';
 export * from './post-preview';
 export * from './search-result';
+export * from './socials';

@@ -1,0 +1,19 @@
+.post-socials-wrap {
+  margin: 3rem 0;
+}
+
+.post-socials-wrap:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.post-socials-wrap a {
+  display: block;
+  float: left;
+  line-height: 0;
+}
+
+.post-socials-wrap img {
+  width: 5rem;
+}

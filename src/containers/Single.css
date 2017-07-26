@@ -1,4 +1,17 @@
+.post-hero {
+  width: 100vw;
+  height: auto;
+  display: block;
+  margin-top: -3rem;
+  margin-left: calc( ((100vw - 100%) / 2 ) * -1 );
+}
+
+.post-hero img {
+  width: 100%;
+}
+
 .post-header {
+  padding-top: 3rem;
   font-size: 2rem;
 }
 
@@ -8,7 +21,6 @@
 }
 
 .post-body {
-  padding-top: 2rem;
   font-size: 1.6rem;
 }
 
@@ -35,10 +47,13 @@
   margin-bottom: 0 !important;
 }
 
-.post-body__inner figure img + figcaption {
-  margin-top: 2rem;
+.post-body__inner figure figcaption {
   font-size: 0.75em;
   text-transform: uppercase;
+}
+
+.post-body__inner figure figcaption:not( :first-child ) {
+  margin-top: 2rem;
 }
 
 .post-footer {

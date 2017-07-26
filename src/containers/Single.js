@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+// Components
+import { Socials } from '../components';
+
+// Services
+import { mediaUtils } from '../utils';
+
 import * as postActions from '../actions/post'
 
 import * as wordpressApi from '../wordpressApi';
@@ -43,13 +49,19 @@ class Single extends Component {
       /// TODO
     }
 
+    let socialMediaData = mediaUtils.extractSocialMediaData( post );
+
     // ...
     return (
       <main>
+        <section className="post-hero">
+          <img src="http://lorempixel.com/1600/900/" alt="#" />
+        </section>
         <section className="post-header">
           <h1>{ post.post_title }</h1>
         </section>
         <section className="post-body">
+          <Socials data={ socialMediaData } />
           <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
           </div>
         </section>

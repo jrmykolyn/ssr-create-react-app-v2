@@ -17,9 +17,24 @@ function handleize( str ) {
   return str;
 }
 
+/**
+ * ...
+ */
+function urlize( str ) {
+  if ( !str || typeof str !== 'string' ) {
+    return str;
+  }
+
+  str = str.replace( / /gmi, '+' );
+  str = str.toLowerCase();
+
+  return str;
+}
+
 // --------------------------------------------------
 // PUBLIC API
 // --------------------------------------------------
 export const stringUtils = {
   handleize,
+  urlize,
 };
