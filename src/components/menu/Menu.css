@@ -4,7 +4,6 @@ nav {
 
 nav a {
   display: inline-block;
-  border-bottom: 0.2rem solid transparent;
   font-size: 1em;
   outline: none;
 }
@@ -15,26 +14,54 @@ nav a:focus {
   border-bottom-color: inherit;
 }
 
-nav a:not( :last-child ) {
-  margin-right: 1em;
+.primary {
+  font-size: 2rem; /* 20px */
 }
 
-.primary {}
+.primary a {
+  padding: 0 1em;
+  position: relative;
+}
+
+.primary a:first-child {
+  padding-left: 0;
+}
+
+.primary a:last-child {
+  padding-right: 0;
+}
+
+.primary a:not( :first-child )::before,
+.secondary a:not( :first-child )::before {
+  content: '•';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate( -50%, -50% );
+  color: #444;
+}
 
 .secondary {
   width: 100%;
   height: auto;
-  padding: 1rem;
+  padding: 0;
   color: #FFF;
   background: #222;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   text-align: center;
 }
 
 .secondary a {
-  color: inherit;
-  margin: 0 1em;
-  font-size: 1em;
+  color: rgba( 255, 255, 255, 0.6 );
+  margin: 0;
+  padding: 0 1.666666em; /* 25px */
+  line-height: 1.9; /* ~28px */
+  position: relative;
+}
+
+.secondary a:hover,
+.secondary a:focus {
+  color: rgba( 255, 255, 255, 1 );
 }
 
 .secondary a:hover,

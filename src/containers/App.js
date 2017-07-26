@@ -24,19 +24,21 @@ class App extends Component {
   render() {
     let primaryMenuData = [];
     let secondaryMenuData = [];
+    let searchBar = {};
 
     try {
       // NOTE:
       // `menus` should be an object, where the value @ each key is an array of menu items.
       primaryMenuData = this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] || [];
       secondaryMenuData = this.props.app.menus[ MENU_CONFIG.secondary || 'secondary' ] || [];
+      searchBar = this.props.app.searchBar;
     } catch ( err ) {
       /// TODO[@jrmykolyn] - Handle error... or don't?
     }
 
     return (
       <div>
-        <Header primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
+        <Header toggleSearch={ this.toggleSearch.bind( this ) } searchBar={ searchBar } primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route path="/search/" component={Search} />
@@ -63,6 +65,10 @@ class App extends Component {
           console.log( err ); /// TEMP
         } );
     }
+  }
+
+  toggleSearch() {
+    this.props.appActions.toggleSearchBar();
   }
 }
 

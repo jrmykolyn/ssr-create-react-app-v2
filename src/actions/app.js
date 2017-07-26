@@ -4,3 +4,9 @@ export function updateMenus( payload ) {
     payload,
   };
 }
+
+export function toggleSearchBar() {
+  return {
+    type: 'APP_TOGGLE_SEARCH_BAR',
+  };
+}

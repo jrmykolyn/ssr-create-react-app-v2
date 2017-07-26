@@ -8,8 +8,13 @@ header {
   padding: 0;
 }
 
-.header__inner,
-.header__search {
+.header__upper,
+.header__inner {
+  position: relative;
+  overflow: hidden;
+}
+
+.header__inner {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -18,32 +23,52 @@ header {
 }
 
 .header__inner {
-  width: 94%;
-  max-width: 96rem;
-  padding: 1.5rem 0;
+  width: 100%;
+  padding: 1.5rem 3rem;
 }
 
 .header__inner h1 {
   margin: 0;
 }
 
-.header__search {
+.header__upper {
   width: 100%;
-  max-width: 100%;
-  border-top: 0.1rem solid #DDD;
-  padding: 1rem 0;
+  height: auto;
 }
 
-.header__search form {
-  width: 94%;
-  max-width: 96rem;
+.search-wrap {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  background: #EEE;
+  border-top: 0.1rem solid #DDD;
   margin: 0 auto;
+  padding: 1rem 3rem;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transition: all 0.2s;
+}
+
+.search-wrap.is-active {
+  bottom: 0;
+}
+
+.search-wrap form {
+  width: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  margin: 0 auto;
+  margin-right: 3rem;
   padding: 0;
 }
 
-.header__search form input {
+.search-wrap form input {
   margin: 0;
   padding: 0;
   color: #666;
@@ -51,14 +76,14 @@ header {
   font-size: 1.6rem;
 }
 
-.header__search form input[type="text"] {
+.search-wrap form input[type="text"] {
   width: 100%;
   flex: 1 1 auto;
   border: none;
   border-bottom: 0.1rem solid #666;
 }
 
-.header__search form input[type="submit"] {
+.search-wrap form input[type="submit"] {
   width: 3.5rem;
   height: 3.5rem;
   display: block;
@@ -66,4 +91,55 @@ header {
   margin-left: 2rem;
   background: #DDD; /* /// TEMP */
   border: none;
+}
+
+.logo-wrap {
+  width: 20%;
+}
+
+.logo {
+  height: 7rem;
+  display: block;
+}
+
+.controls-wrap {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.socials-wrap {}
+
+.socials-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.socials-list li {
+  display: inline-block;
+  padding: 0;
+}
+
+.socials-list li:not( :last-child )  {
+  margin-right: 2rem;
+}
+
+.socials-list a {
+  width: 3rem;
+  height: 3rem;
+  display: block;
+}
+
+.socials-list img {
+  width: 100%;
+  height: 100%;
+}
+
+.search-toggle {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: block;
+  background: #DDD;
 }
