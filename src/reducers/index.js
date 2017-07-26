@@ -5,6 +5,7 @@ import archive from './archive';
 import home from './home';
 import page from './page';
 import post from './post';
+import search from './search';
 import user from './user';
 
 export default combineReducers( {
@@ -13,5 +14,6 @@ export default combineReducers( {
   home,
   page,
   post,
+  search,
   user,
 } );

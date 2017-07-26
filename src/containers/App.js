@@ -8,6 +8,7 @@ import Home from './Home';
 import Single from './Single'
 import Page from './Page';
 import Archive from './Archive';
+import Search from './Search';
 import NoMatch from '../components/NoMatch'
 import { Footer, Header, Menu } from '../components'
 
@@ -38,6 +39,7 @@ class App extends Component {
         <Header primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
         <Switch>
           <Route exact path="/" component={Home}/>
+          <Route path="/search/" component={Search} />
           <Route path="/category/:slug" component={Archive} />
           <Route path="/:category/:slug" component={Single} />
           <Route path="/:slug" component={Page} />
@@ -65,11 +67,11 @@ class App extends Component {
 }
 
 const mapStateToProps = ( state ) => ( {
-  app: state.app
+  app: state.app,
 } );
 
 const mapDispatchToProps = ( dispatch ) => ( {
-  appActions: bindActionCreators( appActions, dispatch )
+  appActions: bindActionCreators( appActions, dispatch ),
 } );
 
 // NOTE:

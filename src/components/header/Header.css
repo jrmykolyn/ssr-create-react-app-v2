@@ -8,13 +8,62 @@ header {
   padding: 0;
 }
 
-.header__inner {
-  width: 94%;
-  max-width: 96rem;
+.header__inner,
+.header__search {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
+}
+
+.header__inner {
+  width: 94%;
+  max-width: 96rem;
   padding: 1.5rem 0;
+}
+
+.header__inner h1 {
+  margin: 0;
+}
+
+.header__search {
+  width: 100%;
+  max-width: 100%;
+  border-top: 0.1rem solid #DDD;
+  padding: 1rem 0;
+}
+
+.header__search form {
+  width: 94%;
+  max-width: 96rem;
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.header__search form input {
+  margin: 0;
+  padding: 0;
+  color: #666;
+  background: transparent;
+  font-size: 1.6rem;
+}
+
+.header__search form input[type="text"] {
+  width: 100%;
+  flex: 1 1 auto;
+  border: none;
+  border-bottom: 0.1rem solid #666;
+}
+
+.header__search form input[type="submit"] {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: block;
+  flex: 0 0 auto;
+  margin-left: 2rem;
+  background: #DDD; /* /// TEMP */
+  border: none;
 }

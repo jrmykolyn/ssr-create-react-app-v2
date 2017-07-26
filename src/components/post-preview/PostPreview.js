@@ -2,19 +2,24 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+// Utils
+import { stringUtils } from '../../utils';
+
 import './PostPreview.css'
 
 export class PostPreview extends Component {
   render() {
-    let categorySlug = this.props.data.post_categories[ 0 ] || 'Default';
-    let postSlug = this.props.data.post_name || '#';
-    let postTitle = this.props.data.post_title || 'Default';
+    let category = this.props.data.post_categories[ 0 ] || {};
+    let categorySlug = category.slug || 'Default'; /// FIXME[@jmykolyn] - Add real 'fallback' value.
+    let categoryName = category.name || 'Default'; /// FIXME[@jmykolyn] - Add real 'fallback' value.
+    let postSlug = this.props.data.post_name || '#'; /// FIXME[@jmykolyn] - Add real 'fallback' value.
+    let postTitle = this.props.data.post_title || 'Default'; /// FIXME[@jmykolyn] - Add real 'fallback' value.
 
     return(
       <article className="post-preview">
         <div className="post-preview__header">
           <h2>
-            <Link to={`/category/${categorySlug}`} dangerouslySetInnerHTML={ { __html: categorySlug } }></Link>
+            <Link to={`/category/${categorySlug}`} dangerouslySetInnerHTML={ { __html: categoryName } }></Link>
           </h2>
           <h1>
             <Link to={ `/${categorySlug}/${postSlug}`}>{ postTitle }</Link>
