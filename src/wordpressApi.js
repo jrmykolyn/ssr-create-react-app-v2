@@ -7,6 +7,9 @@ const http = require( 'http' );
 // Vendor
 const Promise = require( 'bluebird' );
 
+// Utils
+const { routeUtils } = require( './utils' );
+
 // Config.
 const API_CONFIG = require( './config/api' ); /// TEMP
 const { WORDPRESS_API_CONFIG } = API_CONFIG; /// TEMP
@@ -16,9 +19,12 @@ const { WORDPRESS_API_CONFIG } = API_CONFIG; /// TEMP
 // --------------------------------------------------
 function fetch( opts={}  ) {
   return new Promise( ( resolve, reject ) => {
+    let { params={} } = opts;
+    let paramsString = routeUtils.queryStringifyParams( params );
+
     let options = {
       hostname: `${WORDPRESS_API_CONFIG.hostname}`,
-      path: `/${WORDPRESS_API_CONFIG.path}/${WORDPRESS_API_CONFIG.api}/${opts.endpoint}`,
+      path: `/${WORDPRESS_API_CONFIG.path}/${WORDPRESS_API_CONFIG.api}/${opts.endpoint}?${paramsString}`,
     };
 
     let request = http.get( options, ( response ) => {
@@ -75,8 +81,8 @@ export function fetchHomePage() {
   return fetch( { requestType: 'home', endpoint: `x/frontpage` } );
 }
 
-export function fetchPostsByCategory( slug ) {
-  return fetch( { requestType: 'archive', endpoint: `x/categories/${slug}/posts`, slug: slug } );
+export function fetchPostsByCategory( slug, params ) {
+  return fetch( { requestType: 'archive', endpoint: `x/categories/${slug}/posts`, slug: slug, params: params } );
 }
 
 export function fetchPageBySlug( slug ) {
