@@ -23,6 +23,7 @@ import './Archive.css';
 /**
  * ...
  */
+/// TODO[@jmykolyn] - Rename this!
 function checkFetch( componentRef ) {
   // Fetch data if:
   // - We're in the client
@@ -38,15 +39,26 @@ function checkFetch( componentRef ) {
 
 /**
  * ...
+ *
+ * NOTE:
+ * - Function *always* provides a list of 'excludes' when fetching new data.
  */
-function getCategoryData( componentRef ) {
-  wordpressApi.fetchPostsByCategory( componentRef.props.match.params.slug )
-    .then( ( response ) => {
-      componentRef.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
-    } )
-    .catch( ( err ) => {
-      console.log( err ); /// TEMP
-    } );
+function getCategoryPosts( componentRef ) {
+  let slug = componentRef.props.match.params.slug;
+  let excludes = getExcludes( componentRef.props.archive[ slug ] || [] );
+  let params = { excludes };
+
+  return new Promise( ( resolve, reject ) => {
+    wordpressApi.fetchPostsByCategory( slug, params )
+      .then( resolve, reject );
+  } );
+}
+
+/**
+ * ...
+ */
+function getExcludes( posts ) {
+  return posts.map( ( post ) => { return post.ID } );
 }
 
 // --------------------------------------------------
@@ -54,8 +66,6 @@ function getCategoryData( componentRef ) {
 // --------------------------------------------------
 export class Archive extends Component {
   render() {
-    console.log( 'INSIDE `Archive#render()`' ); /// TEMP
-
     // Extract the `archiveType` (eg. the specific category) from the route.
     let slug = this.props.match.params.slug || '';
 
@@ -80,19 +90,73 @@ export class Archive extends Component {
   }
 
   componentWillMount() {
-    console.log( 'INSIDE `Archive#componentWillMount()`' ); /// TEMP
+    // Create 'bound' version of `handleScroll` callback.
+    // Required so that function:
+    // - Has access to component reference via `this`.
+    // - Can be remove within `componentWillUnmount()`.
+    this.boundHandleScroll = this.handleScroll.bind( this );
 
+    // ...
+    window.addEventListener( 'scroll', this.boundHandleScroll );
+
+    /// TODO[@jmykolyn] - Look into whether this can be removed (exact same logic exists in `componentDidUpdate()`)?
     if ( checkFetch( this ) ) {
-      getCategoryData( this );
+      getCategoryPosts( this )
+        .then( ( response ) => {
+          this.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
+        } )
+        .catch( ( err ) => {
+          console.log( err );
+        } );
     }
   }
 
-  componentDidUpdate( prevProps, prevState ) {
-    console.log( 'INSIDE `Archive#componentDidUpdate()`' ); /// TEMP
+  componentWillUnmount() {
+    console.log( 'INSIDE `componentWillUnmount()`' ); /// TEMP
 
+    window.removeEventListener( 'scroll', this.boundHandleScroll );
+  }
+
+  componentDidUpdate( prevProps, prevState ) {
     /// TODO[@jmykolyn] - Look into whether or not we need to do this in all cases?
+    /// TODO[@jmykolyn] - Look into whether this can be removed (exact same logic exists in `componentWillMount()`)?
     if ( checkFetch( this ) ) {
-      getCategoryData( this );
+      getCategoryPosts( this )
+       .then( ( response ) => {
+          this.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
+        } )
+        .catch( ( err ) => {
+          console.log( err );
+        } );
+    }
+
+    // Check for presence of `__loadMore`, fetch additional posts if required.
+    if ( this.props.archive.__loadMore ) {
+      getCategoryPosts( this )
+        .then( ( response ) => {
+          this.props.archiveActions.resolveLoadMore( JSON.parse( response.payload ), response.slug );
+        } )
+        .catch( ( err ) => {
+          console.log( err );
+        } );
+    }
+  }
+
+  handleScroll() {
+    console.log( 'INSIDE `handleScroll()`' ); /// TEMP
+
+    try {
+      let winHeight = window.innerHeight;
+      let winScroll = window.pageYOffset;
+      let docHeight = document.body.clientHeight;
+
+      if ( ( docHeight - ( winHeight + winScroll ) ) <= winHeight ) {
+        if ( !this.props.archive.__loadMore ) {
+          this.props.archiveActions.initLoadMore( this.props.match.params.slug );
+        }
+      }
+    } catch ( err ) {
+      /// TOD
     }
   }
 }
