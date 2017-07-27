@@ -1,0 +1,16 @@
+.page-header {
+  padding-top: 3rem;
+  font-size: 2rem;
+}
+
+.page-body {
+  padding-top: 2rem;
+}
+
+.page-body__inner {
+
+}
+
+[class*="page"] * {
+  /*color: red;*/
+}

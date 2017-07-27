@@ -49,14 +49,13 @@ class Single extends Component {
       /// TODO
     }
 
+    let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
     let socialMediaData = mediaUtils.extractSocialMediaData( post );
 
     // ...
     return (
       <main>
-        <section className="post-hero">
-          <img src="http://lorempixel.com/1600/900/" alt="#" />
-        </section>
+        { postHero }
         <section className="post-header">
           <h1>{ post.post_title }</h1>
         </section>

@@ -12,8 +12,24 @@
   margin-bottom: 2rem;
 }
 
+.post-preview__hero {
+
+}
+
+.post-preview__hero img {
+  /*
+    `*: *!important` temporarily required in order to override inline WP styles.
+  */
+  width: 100% !important;
+  height: auto !important;
+}
+
 .post-preview__header {
 
+}
+
+.post-preview__header:not( :first-child ) {
+  padding-top: 2rem;
 }
 
 .post-preview__header h1 {

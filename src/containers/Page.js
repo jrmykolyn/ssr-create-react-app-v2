@@ -6,7 +6,7 @@ import * as pageActions from '../actions/page'
 
 import * as wordpressApi from '../wordpressApi';
 
-import './Single.css'
+import './Page.css'
 
 class Page extends Component {
   constructor() {
@@ -33,14 +33,14 @@ class Page extends Component {
 
     return (
       <main>
-        <section className="post-header">
+        <section className="page-header">
           <h1>{ page.post_title }</h1>
         </section>
-        <section className="post-body">
-          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
+        <section className="page-body">
+          <div className="page-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
           </div>
         </section>
-        <section className="post-footer"></section>
+        <section className="page-footer"></section>
       </main>
     );
   }
