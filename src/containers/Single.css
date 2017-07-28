@@ -2,7 +2,6 @@
   width: 100vw;
   height: auto;
   display: block;
-  margin-top: -3rem;
   margin-left: calc( ((100vw - 100%) / 2 ) * -1 );
 }
 
@@ -25,11 +24,8 @@
 }
 
 .post-body {
+  margin-bottom: 6rem;
   font-size: 1.6rem;
-}
-
-.post-body__inner {
-
 }
 
 .post-body__inner img {

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withRouter } from 'react-router-dom';
 
 // Components
 import { Socials } from '../components';
 
-// Services
-import { mediaUtils } from '../utils';
+// Utils
+import { stringUtils, mediaUtils, postUtils } from '../utils';
 
 import * as postActions from '../actions/post'
 
@@ -14,12 +15,27 @@ import * as wordpressApi from '../wordpressApi';
 
 import './Single.css'
 
+// --------------------------------------------------
+// DECLARE FUNCTIONS
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+// DEFINE CLASS
+// --------------------------------------------------
 class Single extends Component {
   constructor() {
     super();
   }
 
   componentWillMount() {
+    // ...
+    this.boundHandleScroll = this.handleScroll.bind( this );
+
+    // ...
+    window.addEventListener( 'scroll', this.boundHandleScroll );
+
+    // ...
     if ( !this.props.staticContext && ( !this.props.post || !this.props.post[ this.props.match.params.slug ] ) ) {
       wordpressApi.fetchPostBySlug( this.props.match.params.slug )
         .then( ( response ) => {
@@ -33,44 +49,52 @@ class Single extends Component {
 
   render() {
     let slug = '';
-    let post = {};
+    let posts = [];
+    let output = '';
 
     // ...
     try {
-      // ...
       slug = this.props.match.params.slug;
 
-      // ...
-      post = Object.keys( this.props.post )
+      posts = Object.keys( this.props.post )
         .filter( ( postSlug ) => { return postSlug === slug; } )
         .map( ( postSlug ) => { return this.props.post[ postSlug ]; } )
-        .reduce( ( a, b ) => { return { ...a, ...b }; }, {} );
+        .reduce( ( a, b ) => { return [ ...a, ...b ] }, [] );
     } catch ( err ) {
       /// TODO
     }
 
-    let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
-    let socialMediaData = mediaUtils.extractSocialMediaData( post );
+    output = posts.map( ( post, i ) => {
+      let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
+      let socialMediaData = mediaUtils.extractSocialMediaData( post );
+      let postSlug = stringUtils.handleize( post.post_name );
 
-    // ...
+      // ...
+      return (
+        <article key={ i } data-post-slug={postSlug}>
+          { postHero }
+          <section className="post-header">
+            <h1>{ post.post_title }</h1>
+          </section>
+          <section className="post-body">
+            <Socials data={ socialMediaData } />
+            <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
+            </div>
+          </section>
+          <section className="post-footer"></section>
+        </article>
+      );
+    } );
+
     return (
       <main>
-        { postHero }
-        <section className="post-header">
-          <h1>{ post.post_title }</h1>
-        </section>
-        <section className="post-body">
-          <Socials data={ socialMediaData } />
-          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
-          </div>
-        </section>
-        <section className="post-footer"></section>
+        { output }
       </main>
     );
   }
 
   componentWillReceiveProps() {
-    console.log( 'INSIDE `Single#componentWillReceiveProps()`' ); /// TEMP
+    // console.log( 'INSIDE `Single#componentWillReceiveProps()`' ); /// TEMP
   }
 
   // shouldComponentUpdate() {
@@ -78,15 +102,95 @@ class Single extends Component {
   // }
 
   componentWillUpdate() {
-    console.log( 'INSIDE `Single#componentWillUpdate()`' ); /// TEMP
+    // console.log( 'INSIDE `Single#componentWillUpdate()`' ); /// TEMP
   }
 
   componentDidUpdate() {
-    console.log( 'INSIDE `Single#componentDidUpdate()`' ); /// TEMP
+    // console.log( 'INSIDE `Single#componentDidUpdate()`' ); /// TEMP
+
+    if ( this.props.post.__loadMore ) {
+      let { category, slug } = this.props.match.params;
+      let excludes = postUtils.getIds( this.props.post[ slug ] );
+      let postsPerPage = 1;
+
+      let params = { excludes, postsPerPage };
+
+      wordpressApi.fetchPostsByCategory( category, params )
+        .then( ( response ) => {
+          return JSON.parse( response.payload );
+        } )
+        .then( ( payload ) => {
+          this.props.postActions.resolveLoadMore( payload, slug );
+        } )
+        .catch( ( err ) => {
+          console.log( err ); /// TEMP
+        } );
+    }
   }
 
   componentWillUnmount() {
-    console.log( 'INSIDE `Single#componentWillUnmount()`' ); /// TEMP
+    // console.log( 'INSIDE `Single#componentWillUnmount()`' ); /// TEMP
+
+    // ...
+    window.removeEventListener( 'scroll', this.boundHandleScroll );
+  }
+
+  handleScroll() {
+    // Check if 'load more' needs to be triggered.
+    try {
+      let winHeight = window.innerHeight;
+      let winScroll = window.pageYOffset;
+      let docHeight = document.body.clientHeight;
+
+      /// TODO[@jmykolyn] - Add comments, refactor.
+      if ( !this.props.post.__loadMore && ( docHeight - ( winHeight + winScroll ) ) <= winHeight ) {
+        this.props.postActions.initLoadMore();
+      }
+    } catch ( err ) {
+      /// TODO
+    }
+
+    // Check if route needs to be updated.
+    /// TODO[@jmykolyn] - Make this not gross...
+    try {
+      // ...
+      if ( this.props.post[ this.props.match.params.slug ].length > 1 ) {
+        // ...
+        let postElems = document.querySelectorAll( 'article' );
+        postElems = Array.prototype.slice.call( postElems );
+
+        // MAP ELEMS TO EL REFERENCE + OFFSET NUMBER
+        let postMap = postElems.map( ( post ) => {
+          return {
+            elem: post,
+            offset: post.getBoundingClientRect().top,
+          }
+        } );
+
+        // FILTER OUT POSTS WHICH ARE 'BELOW THE FOLD'
+        postMap = postMap.filter( ( obj ) => {
+          return obj.offset <= 0;
+        } );
+
+        // REDUCE REMAINING TO POST TO 'CLOSEST TO TOP OF VIEWPORT'
+        let activePost = postMap.reduce( ( a, b ) => {
+          if ( !a.elem || !a.offset ) {
+            return b;
+          }
+
+          return ( a.offset > b.offset ) ? a : ( a.offset < b.offset ) ? b : b;
+        }, {} );
+
+        let slug = activePost.elem.dataset.postSlug;
+
+        // ...
+        if ( window.location.pathname.indexOf( slug ) === -1 ) {
+          window.history.pushState( { foo: 'bar' }, 'title', slug );
+        }
+      }
+    } catch ( err ) {
+
+    }
   }
 }
 
