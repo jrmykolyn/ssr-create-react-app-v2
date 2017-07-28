@@ -2,6 +2,7 @@
 // IMPORT MODULES
 // --------------------------------------------------
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -13,6 +14,9 @@ import * as wordpressApi from '../wordpressApi';
 
 // Components
 import { PostPreview, Loader } from '../components';
+
+// Utils
+import { stringUtils } from '../utils';
 
 // Styles
 import './Archive.css';
@@ -84,6 +88,9 @@ export class Archive extends Component {
 
     return (
       <main className="archive-wrapper">
+        <Helmet>
+          <title>{ stringUtils.transform( slug, [ stringUtils.dehandleize, stringUtils.titleize ] ) }</title>
+        </Helmet>
         { output }
       </main>
     );
