@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux'
 
 // Components
 import { Socials } from '../components';
@@ -72,6 +73,9 @@ class Single extends Component {
       // ...
       return (
         <article key={ i } data-post-slug={postSlug}>
+          <Helmet>
+            <title>{ stringUtils.titleize( post.post_title ) }</title>
+          </Helmet>
           { postHero }
           <section className="post-header">
             <h1>{ post.post_title }</h1>
