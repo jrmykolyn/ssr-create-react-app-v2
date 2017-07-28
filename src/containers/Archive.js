@@ -83,7 +83,7 @@ export class Archive extends Component {
     let output = ( Array.isArray( posts ) && posts.length ) ? posts : <Loader />;
 
     return (
-      <main>
+      <main className="archive-wrapper">
         { output }
       </main>
     );
