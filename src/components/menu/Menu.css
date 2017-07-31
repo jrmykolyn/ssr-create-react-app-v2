@@ -16,6 +16,7 @@ nav a:focus {
 
 .primary {
   font-size: 2rem; /* 20px */
+  flex-grow: 1;
 }
 
 .primary a {

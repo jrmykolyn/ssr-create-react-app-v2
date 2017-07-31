@@ -24,7 +24,7 @@ header {
 
 .header__inner {
   width: 100%;
-  padding: 1.5rem 3rem;
+  padding: 3rem;
 }
 
 .header__inner h1 {
@@ -44,7 +44,7 @@ header {
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  background: #EEE;
+  background: #FFF;
   border-top: 0.1rem solid #DDD;
   margin: 0 auto;
   padding: 1rem 3rem;
@@ -98,7 +98,7 @@ header {
 }
 
 .logo {
-  height: 7rem;
+  height: 4rem;
   display: block;
 }
 
@@ -109,37 +109,40 @@ header {
   align-items: center;
 }
 
-.socials-wrap {}
+.socials-wrap {
+
+}
 
 .socials-list {
+  display: flex;
+  justify-content: space-between;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .socials-list li {
-  display: inline-block;
+  display: block;
   padding: 0;
 }
 
-.socials-list li:not( :last-child )  {
-  margin-right: 2rem;
+.socials-list li {
+  margin-right: 4rem;
 }
 
 .socials-list a {
-  width: 3rem;
-  height: 3rem;
   display: block;
 }
 
 .socials-list img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: 2.2rem;
+  display: block;
 }
 
 .search-toggle {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   display: block;
-  background: #DDD;
+  cursor: pointer;
 }

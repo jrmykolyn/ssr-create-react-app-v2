@@ -23,7 +23,7 @@ export class Header extends Component {
         <div className="header__inner">
           <div className="logo-wrap">
             <a href="#">
-              <img className="logo" src="/favicons/favicon-512x512.png" alt="#" />
+              <img className="logo" src="/assets/logos/ottawa-logo-base.svg" alt="#" />
             </a>
           </div>
           <div className="controls-wrap">
@@ -32,29 +32,33 @@ export class Header extends Component {
               <ul className="socials-list">
                 <li>
                   <a href="#">
-                    <img src="/favicons/favicon-512x512.png" alt="#" />
+                    <img src="/assets/icons/header_facebook.svg" alt="#" />
                   </a>
                 </li>
                 <li>
                   <a href="#">
-                    <img src="/favicons/favicon-512x512.png" alt="#" />
+                    <img src="/assets/icons/header_twitter.svg" alt="#" />
                   </a>
                 </li>
                 <li>
                   <a href="#">
-                    <img src="/favicons/favicon-512x512.png" alt="#" />
+                    <img src="/assets/icons/header_instagram.svg" alt="#" />
                   </a>
                 </li>
               </ul>
             </div>
-            <div className="search-toggle" onClick={ this.toggle.bind( this ) }></div>
+            <div className="search-toggle" onClick={ this.toggle.bind( this ) }>
+              <img src="/assets/icons/search-open.png" alt="#" />
+            </div>
           </div>
           <div className={ "search-wrap " + ( showSearchBar ? 'is-active' : '' ) }>
             <form method="GET" action={ PERMALINKS_CONFIG.search }>
               <input type="text" name="q" />
               <input type="submit" value="" />
             </form>
-            <div className="search-toggle" onClick={ this.toggle.bind( this ) }></div>
+            <div className="search-toggle" onClick={ this.toggle.bind( this ) }>
+              <img src="/assets/icons/search-close.png" alt="#" />
+            </div>
           </div>
         </div>
       </header>
