@@ -36,6 +36,8 @@ class Single extends Component {
   }
 
   render() {
+    console.log( 'INSIDE `Single#render()`' ); /// TEMP
+
     let slug = '';
     let posts = [];
     let output = '';
@@ -52,15 +54,17 @@ class Single extends Component {
         && this.props.post.__activePost.post_name !== slug
       ) ? stringUtils.handleize( this.props.post.__activePost.post_name ) : slug;
 
-      window.history.pushState( { foo: 'bar' }, 'title', activePostSlug );
+      if ( !this.props.staticContext ) {
+        window.history.pushState( { foo: 'bar' }, 'title', activePostSlug ); /// TEMP
+      }
     } catch ( err ) {
       /// TODO
     }
 
     output = posts.map( ( post, i ) => {
       let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
-      let socialMediaData = mediaUtils.extractSocialMediaData( post );
       let postSlug = stringUtils.handleize( post.post_name );
+      let socialMediaData = ( !this.props.staticContext ) ? mediaUtils.extractSocialMediaData( post ) : [];
 
       // ...
       return (
@@ -81,9 +85,6 @@ class Single extends Component {
 
     return (
       <main>
-        <Helmet>
-          <title>{ stringUtils.transform( activePostSlug, [ stringUtils.dehandleize, stringUtils.titleize ] ) }</title>
-        </Helmet>
         { output }
       </main>
     );
@@ -91,20 +92,24 @@ class Single extends Component {
 
   componentWillMount() {
     // ...
-    this.boundHandleScroll = this.handleScroll.bind( this );
+    if ( !this.props.staticContext ) {
+      if ( !this.boundHandleScroll ) {
+        // ...
+        this.boundHandleScroll = this.handleScroll.bind( this );
 
-    // ...
-    window.addEventListener( 'scroll', this.boundHandleScroll );
+        // ...
+        window.addEventListener( 'scroll', this.boundHandleScroll );
+      }
 
-    // ...
-    if ( !this.props.staticContext && ( !this.props.post || !this.props.post[ this.props.match.params.slug ] ) ) {
-      wordpressApi.fetchPostBySlug( this.props.match.params.slug )
-        .then( ( response ) => {
-          this.props.postActions.update( JSON.parse( response.payload ), response.slug );
-        } )
-        .catch( ( err ) => {
-          console.log( err ); /// TEMP
-        } );
+      if ( !this.props.post || !this.props.post[ this.props.match.params.slug ] ) {
+        wordpressApi.fetchPostBySlug( this.props.match.params.slug )
+          .then( ( response ) => {
+            this.props.postActions.update( JSON.parse( response.payload ), response.slug );
+          } )
+          .catch( ( err ) => {
+            console.log( err ); /// TEMP
+          } );
+      }
     }
   }
 

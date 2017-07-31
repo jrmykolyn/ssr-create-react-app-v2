@@ -63,17 +63,24 @@ function handlePageRequest( req, res, filePath ) {
             },
           };
 
-          // Update `initialState` with cotent.
-          // If `content` includes `slug`:
-            // - Create a new sub-object using `requestType`, `slug`, `payload`.
-          // Else:
-            // - Set the `requestType` equal to the `payload`.
-          if ( content.slug ) {
-            initialState[ content.requestType ] = {
-              [ content.slug ]: JSON.parse( content.payload ),
-            }
-          } else {
-            initialState[ content.requestType ] = JSON.parse( content.payload );
+          // ...
+          switch( content.requestType ) {
+            case 'post':
+              initialState[ content.requestType ] = {
+                [ content.slug ]: [ JSON.parse( content.payload ) ],
+              }
+              break;
+            case 'archive':
+              initialState[ content.requestType ] = {
+                [ content.slug ]: JSON.parse( content.payload ),
+              }
+              break;
+            case 'page':
+              /// FIXME
+              initialState[ content.requestType ] = JSON.parse( content.payload );
+              break;
+            default:
+              /// DO NO THINGS;
           }
 
         } catch ( err ) {

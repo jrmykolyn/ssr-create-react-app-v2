@@ -76,10 +76,28 @@ export class Archive extends Component {
     // Extract the correspondng posts from the `archive` data; fall back to empty array.
     let archivePosts = ( this.props.archive && this.props.archive[ slug ] ) ? this.props.archive[ slug ] : [];
 
-    // Map extracted posts to components.
-    let posts = archivePosts.map( ( post ) => {
+    // // Map extracted posts to components.
+    let posts = archivePosts.reduce( ( a, b, i ) => {
+      if ( i === 0 || ( i + 1 ) % 5 === 0 ) {
+         a.push( [ b ] )
+       } else {
+        a[ a.length - 1 ].push( b )
+       }
+
+      return a;
+
+    }, [] )
+    .map( ( postArr, i ) => {
+      let postPreviewMarkup = postArr
+        .map( ( post, j ) => {
+          return <PostPreview key={ j } data={ post } />
+        } );
+
       return (
-        <PostPreview key={ post.ID } data={ post } />
+        <section className="post-batch" key={ i }>
+          { postPreviewMarkup }
+          <div className="sjmlm_bucket"></div>
+        </section>
       );
     } );
 
@@ -100,11 +118,14 @@ export class Archive extends Component {
     // Create 'bound' version of `handleScroll` callback.
     // Required so that function:
     // - Has access to component reference via `this`.
-    // - Can be remove within `componentWillUnmount()`.
-    this.boundHandleScroll = this.handleScroll.bind( this );
+    // - Can be removed within `componentWillUnmount()`.
 
-    // ...
-    window.addEventListener( 'scroll', this.boundHandleScroll );
+    if ( !this.props.staticContext && !this.boundHandleScroll ) {
+      this.boundHandleScroll = this.handleScroll.bind( this );
+
+      // ...
+      window.addEventListener( 'scroll', this.boundHandleScroll );
+    }
 
     /// TODO[@jmykolyn] - Look into whether this can be removed (exact same logic exists in `componentDidUpdate()`)?
     if ( checkFetch( this ) ) {
