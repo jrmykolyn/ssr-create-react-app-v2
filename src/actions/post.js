@@ -20,3 +20,16 @@ export function resolveLoadMore( payload, slug ) {
     payload,
   }
 }
+
+export function setActive( post ) {
+  return {
+    type: 'POST_SET_ACTIVE',
+    payload: post,
+  }
+}
+
+export function removeActive() {
+  return {
+    type: 'POST_REMOVE_ACTIVE',
+  }
+}

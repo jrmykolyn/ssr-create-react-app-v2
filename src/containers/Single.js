@@ -19,7 +19,13 @@ import './Single.css'
 // --------------------------------------------------
 // DECLARE FUNCTIONS
 // --------------------------------------------------
-
+function getPostSlug( componentRef ) {
+  try {
+    return componentRef.props.match.params.slug;
+  } catch ( err ) {
+    return '';
+  }
+}
 
 // --------------------------------------------------
 // DEFINE CLASS
@@ -27,6 +33,60 @@ import './Single.css'
 class Single extends Component {
   constructor() {
     super();
+  }
+
+  render() {
+    let slug = '';
+    let posts = [];
+    let output = '';
+    let activePostSlug = '';
+
+    // ...
+    try {
+      slug = getPostSlug( this );
+      posts = this.props.post[ slug ] || [];
+
+      activePostSlug = (
+        this.props.post.__activePost
+        && this.props.post.__activePost.post_name
+        && this.props.post.__activePost.post_name !== slug
+      ) ? stringUtils.handleize( this.props.post.__activePost.post_name ) : slug;
+
+      window.history.pushState( { foo: 'bar' }, 'title', activePostSlug );
+    } catch ( err ) {
+      /// TODO
+    }
+
+    output = posts.map( ( post, i ) => {
+      let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
+      let socialMediaData = mediaUtils.extractSocialMediaData( post );
+      let postSlug = stringUtils.handleize( post.post_name );
+
+      // ...
+      return (
+        <article key={ i } data-post-slug={postSlug} ref={ (elem) => { this.props.post[ slug ][ i ].__ref = elem; } }>
+          { postHero }
+          <section className="post-header">
+            <h1>{ post.post_title }</h1>
+          </section>
+          <section className="post-body">
+            <Socials data={ socialMediaData } />
+            <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
+            </div>
+          </section>
+          <section className="post-footer"></section>
+        </article>
+      );
+    } );
+
+    return (
+      <main>
+        <Helmet>
+          <title>{ stringUtils.transform( activePostSlug, [ stringUtils.dehandleize, stringUtils.titleize ] ) }</title>
+        </Helmet>
+        { output }
+      </main>
+    );
   }
 
   componentWillMount() {
@@ -46,55 +106,6 @@ class Single extends Component {
           console.log( err ); /// TEMP
         } );
     }
-  }
-
-  render() {
-    let slug = '';
-    let posts = [];
-    let output = '';
-
-    // ...
-    try {
-      slug = this.props.match.params.slug;
-
-      posts = Object.keys( this.props.post )
-        .filter( ( postSlug ) => { return postSlug === slug; } )
-        .map( ( postSlug ) => { return this.props.post[ postSlug ]; } )
-        .reduce( ( a, b ) => { return [ ...a, ...b ] }, [] );
-    } catch ( err ) {
-      /// TODO
-    }
-
-    output = posts.map( ( post, i ) => {
-      let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
-      let socialMediaData = mediaUtils.extractSocialMediaData( post );
-      let postSlug = stringUtils.handleize( post.post_name );
-
-      // ...
-      return (
-        <article key={ i } data-post-slug={postSlug}>
-          <Helmet>
-            <title>{ stringUtils.titleize( post.post_title ) }</title>
-          </Helmet>
-          { postHero }
-          <section className="post-header">
-            <h1>{ post.post_title }</h1>
-          </section>
-          <section className="post-body">
-            <Socials data={ socialMediaData } />
-            <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
-            </div>
-          </section>
-          <section className="post-footer"></section>
-        </article>
-      );
-    } );
-
-    return (
-      <main>
-        { output }
-      </main>
-    );
   }
 
   componentWillReceiveProps() {
@@ -133,7 +144,8 @@ class Single extends Component {
   }
 
   componentWillUnmount() {
-    // console.log( 'INSIDE `Single#componentWillUnmount()`' ); /// TEMP
+    console.log( 'INSIDE `Single#componentWillUnmount()`' ); /// TEMP
+    this.props.postActions.removeActive();
 
     // ...
     window.removeEventListener( 'scroll', this.boundHandleScroll );
@@ -141,6 +153,13 @@ class Single extends Component {
 
   handleScroll() {
     // Check if 'load more' needs to be triggered.
+    this.handleLoadMore();
+
+    // Check if route needs to be updated.
+    this.handleRouteUpdate();
+  }
+
+  handleLoadMore() {
     try {
       let winHeight = window.innerHeight;
       let winScroll = window.pageYOffset;
@@ -153,47 +172,36 @@ class Single extends Component {
     } catch ( err ) {
       /// TODO
     }
+  }
 
-    // Check if route needs to be updated.
-    /// TODO[@jmykolyn] - Make this not gross...
+  handleRouteUpdate() {
+    /// TODO[@jmykolyn] - Make this less gross...
     try {
-      // ...
-      if ( this.props.post[ this.props.match.params.slug ].length > 1 ) {
-        // ...
-        let postElems = document.querySelectorAll( 'article' );
-        postElems = Array.prototype.slice.call( postElems );
+      let slug = getPostSlug( this );
 
-        // MAP ELEMS TO EL REFERENCE + OFFSET NUMBER
-        let postMap = postElems.map( ( post ) => {
-          return {
-            elem: post,
-            offset: post.getBoundingClientRect().top,
-          }
-        } );
+      // Proceed if current slug's array contains at least 2x posts.
+      if ( this.props.post[ slug ].length > 1 ) {
 
-        // FILTER OUT POSTS WHICH ARE 'BELOW THE FOLD'
-        postMap = postMap.filter( ( obj ) => {
-          return obj.offset <= 0;
-        } );
+        // Assign `newActivePost` based on post's proximity to top of viewport.
+        let newActivePost = this.props.post[ slug ]
+          .filter( ( post ) => {
+            return post.__ref.getBoundingClientRect().top <= 0;
+          } )
+          .reduce( ( a, b ) => {
+            let aOffset = a.__ref.getBoundingClientRect().top;
+            let bOffset = b.__ref.getBoundingClientRect().top;
 
-        // REDUCE REMAINING TO POST TO 'CLOSEST TO TOP OF VIEWPORT'
-        let activePost = postMap.reduce( ( a, b ) => {
-          if ( !a.elem || !a.offset ) {
-            return b;
-          }
+            return ( a.offset > b.offset ) ? a : ( a.offset < b.offset ) ? b : b;
+          } );
 
-          return ( a.offset > b.offset ) ? a : ( a.offset < b.offset ) ? b : b;
-        }, {} );
-
-        let slug = activePost.elem.dataset.postSlug;
-
-        // ...
-        if ( window.location.pathname.indexOf( slug ) === -1 ) {
-          window.history.pushState( { foo: 'bar' }, 'title', slug );
+        // Update `__activePost` if applicable.
+        if ( !this.props.post.__activePost || this.props.post.__activePost.ID !== newActivePost.ID ) {
+          this.props.postActions.setActive( newActivePost );
         }
+
       }
     } catch ( err ) {
-
+      /// TODO
     }
   }
 }

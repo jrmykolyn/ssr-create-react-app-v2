@@ -1,4 +1,7 @@
-const initialState = {};
+const initialState = {
+  __loadMore: false,
+  __activePost: null,
+};
 
 export default function reducer( state=initialState, action ) {
   switch ( action.type ) {
@@ -20,6 +23,10 @@ export default function reducer( state=initialState, action ) {
         } );
 
       return { ...state, ...{ [ action.slug ]: mergedPosts, __loadMore: false } };
+    case 'POST_SET_ACTIVE':
+      return { ...state, ...{ __activePost: action.payload } };
+    case 'POST_REMOVE_ACTIVE':
+      return { ...state, ...{ __activePost: null } };
     default:
       return state
   }
