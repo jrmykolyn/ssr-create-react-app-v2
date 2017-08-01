@@ -1,6 +1,7 @@
 export * from './feed';
 export * from './footer';
 export * from './header';
+export * from './list';
 export * from './loader';
 export * from './menu';
 export * from './post-preview';
