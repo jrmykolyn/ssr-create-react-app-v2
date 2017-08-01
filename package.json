@@ -26,10 +26,10 @@
     "start": "react-scripts start",
     "start:server": "NODE_ENV=development node server/index.js",
     "now-start": "NODE_ENV=production node server/index.js",
-    "build": "react-scripts build",
+    "build": "npm run styles && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "styles": "node-sass ./src/ -o ./src/",
+    "styles": "node-sass ./src/ -o ./src/ --output-style=expanded",
     "styles:watch": "npm run styles && node-sass ./src -o ./src --watch --recursive"
   }
 }
