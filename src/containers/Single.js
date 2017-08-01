@@ -5,7 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 
 // Components
-import { Socials, Feed } from '../components';
+import { Socials, Feed, List } from '../components';
+
 
 // Utils
 import { stringUtils, mediaUtils, postUtils } from '../utils';
@@ -77,7 +78,11 @@ class Single extends Component {
             </div>
           </section>
           <section className="post-footer">
+            <div className="ad-wrapper--single">
+              <div className="sjmlm_bucket"></div>
+            </div>
             <Feed data={ this.props.post.__recent || [] } />
+            <List />
           </section>
         </article>
       );
@@ -113,6 +118,10 @@ class Single extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log( 'INSIDE `Single#componentDidMount()`' ); /// TEMP
+  }
+
   componentWillReceiveProps() {
     // console.log( 'INSIDE `Single#componentWillReceiveProps()`' ); /// TEMP
   }
@@ -140,28 +149,16 @@ class Single extends Component {
         } );
     }
 
-    if ( this.props.post.__loadMore ) {
-      let { category, slug } = this.props.match.params;
-      let excludes = postUtils.getIds( this.props.post[ slug ] );
-      let postsPerPage = 1;
+    if ( this.props.post.__loadMore === 'after' ) {
+      // ...
+      this.props.app.services.dfp.refreshAds();
 
-      let params = { excludes, postsPerPage };
-
-      wordpressApi.fetchPostsByCategory( category, params )
-        .then( ( response ) => {
-          return JSON.parse( response.payload );
-        } )
-        .then( ( payload ) => {
-          this.props.postActions.resolveLoadMore( payload, slug );
-        } )
-        .catch( ( err ) => {
-          console.log( err ); /// TEMP
-        } );
+      // ...
+      this.props.postActions.completeLoadMore();
     }
   }
 
   componentWillUnmount() {
-    console.log( 'INSIDE `Single#componentWillUnmount()`' ); /// TEMP
     this.props.postActions.removeActive();
 
     // ...
@@ -183,8 +180,27 @@ class Single extends Component {
       let docHeight = document.body.clientHeight;
 
       /// TODO[@jmykolyn] - Add comments, refactor.
-      if ( !this.props.post.__loadMore && ( docHeight - ( winHeight + winScroll ) ) <= winHeight ) {
+      if ( !this.props.post.__loadMore && ( docHeight - ( winHeight + winScroll ) ) <= ( winHeight * 2 ) ) {
+
+        //...
         this.props.postActions.initLoadMore();
+
+        let { category, slug } = this.props.match.params;
+        let excludes = postUtils.getIds( this.props.post[ slug ] );
+        let postsPerPage = 1;
+
+        let params = { excludes, postsPerPage };
+
+        wordpressApi.fetchPostsByCategory( category, params )
+          .then( ( response ) => {
+            return JSON.parse( response.payload );
+          } )
+          .then( ( payload ) => {
+            this.props.postActions.resolveLoadMore( payload, slug );
+          } )
+          .catch( ( err ) => {
+            console.log( err ); /// TEMP
+          } );
       }
     } catch ( err ) {
       /// TODO
@@ -226,6 +242,7 @@ class Single extends Component {
 const mapStateToProps = ( state ) => ( {
   post: state.post,
   recent: state.recent,
+  app: state.app,
 } );
 
 const mapDispatchToProps = ( dispatch ) => ( {

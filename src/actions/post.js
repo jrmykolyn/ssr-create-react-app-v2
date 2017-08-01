@@ -21,6 +21,12 @@ export function resolveLoadMore( payload, slug ) {
   }
 }
 
+export function completeLoadMore() {
+  return {
+    type: 'POST_COMPLETE_LOAD_MORE',
+  }
+}
+
 export function setActive( post ) {
   return {
     type: 'POST_SET_ACTIVE',

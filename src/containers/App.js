@@ -15,6 +15,7 @@ import { Footer, Header, Menu } from '../components'
 import * as appActions from '../actions/app';
 
 import * as wordpressApi from '../wordpressApi';
+import { DfpService } from '../dfp.service';
 
 // Config.
 const CONFIG = require( '../config/' ); // NOTE - Trailing `/` required so that `require( ... )` imports `src/config/index.js`, *NOT* `src/config.js`... Fix this!
@@ -25,6 +26,11 @@ class App extends Component {
     let primaryMenuData = [];
     let secondaryMenuData = [];
     let searchBar = {};
+
+    // ...
+    if ( !this.props.staticContext && ( !this.props.app.services || !this.props.app.services.dfp ) ) {
+      this.props.appActions.updateServices( { name: 'dfp', ref: new DfpService() } );
+    }
 
     try {
       // NOTE:
@@ -53,17 +59,19 @@ class App extends Component {
   }
 
   componentWillMount() {
-    if ( !this.props.staticContext && ( !this.props.app || !this.props.app.menus || !this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] ) ) {
-      wordpressApi.fetchMenus()
-        .then( ( response ) => {
-          return JSON.parse( response.payload );
-        } )
-        .then( ( payload ) => {
-          this.props.appActions.updateMenus( payload );
-        } )
-        .catch( ( err ) => {
-          console.log( err ); /// TEMP
-        } );
+    if ( !this.props.staticContext ) {
+      if ( !this.props.app || !this.props.app.menus || !this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] ) {
+        wordpressApi.fetchMenus()
+          .then( ( response ) => {
+            return JSON.parse( response.payload );
+          } )
+          .then( ( payload ) => {
+            this.props.appActions.updateMenus( payload );
+          } )
+          .catch( ( err ) => {
+            console.log( err ); /// TEMP
+          } );
+      }
     }
   }
 

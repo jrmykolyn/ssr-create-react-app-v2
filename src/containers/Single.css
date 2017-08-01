@@ -63,3 +63,19 @@
     margin-bottom: 0;
   }
 }
+
+.ad-wrapper--single {
+  width: 100vw;
+  height: auto;
+  display: block;
+  background: #EEE;
+  margin: 0;
+  margin-left: calc( ( 100vw - 100% ) / 2 * -1 );
+  padding: 2rem 0;
+}
+
+.ad-wrapper--single * {
+  margin: 0 auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
