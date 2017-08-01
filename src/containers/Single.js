@@ -5,14 +5,15 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 
 // Components
-import { Socials, Feed, List } from '../components';
-
+import { Socials, Feed, List, Loader } from '../components';
 
 // Utils
 import { stringUtils, mediaUtils, postUtils } from '../utils';
 
+// Actions
 import * as postActions from '../actions/post'
 
+// APIs/Services
 import * as wordpressApi from '../wordpressApi';
 
 import './Single.css'
@@ -60,39 +61,48 @@ class Single extends Component {
       /// TODO
     }
 
-    output = posts.map( ( post, i ) => {
-      let postHero = ( post.thumbnail ) ? ( <section className="post-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
-      let postSlug = stringUtils.handleize( post.post_name );
-      let socialMediaData = ( !this.props.staticContext ) ? mediaUtils.extractSocialMediaData( post ) : [];
+    // If no `posts`, render loader component.
+    if ( !Array.isArray( posts ) || !posts.length ) {
+      return(
+        <main>
+          <Loader />
+        </main>
+      )
+    } else {
+      output = posts.map( ( post, i ) => {
+        let postHero = ( post.thumbnail ) ? ( <section className="single-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
+        let postSlug = stringUtils.handleize( post.post_name );
+        let socialMediaData = ( !this.props.staticContext ) ? mediaUtils.extractSocialMediaData( post ) : [];
 
-      // ...
+        // ...
+        return (
+          <article key={ i } data-single-slug={postSlug} ref={ (elem) => { this.props.post[ slug ][ i ].__ref = elem; } }>
+            { postHero }
+            <section className="single-header">
+              <h1>{ post.post_title }</h1>
+            </section>
+            <section className="single-body">
+              <Socials data={ socialMediaData } />
+              <div className="single-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
+              </div>
+            </section>
+            <section className="single-footer">
+              <div className="ad-wrapper--single">
+                <div className="sjmlm_bucket"></div>
+              </div>
+              <Feed data={ this.props.post.__recent || [] } />
+              <List />
+            </section>
+          </article>
+        );
+      } );
+
       return (
-        <article key={ i } data-post-slug={postSlug} ref={ (elem) => { this.props.post[ slug ][ i ].__ref = elem; } }>
-          { postHero }
-          <section className="post-header">
-            <h1>{ post.post_title }</h1>
-          </section>
-          <section className="post-body">
-            <Socials data={ socialMediaData } />
-            <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
-            </div>
-          </section>
-          <section className="post-footer">
-            <div className="ad-wrapper--single">
-              <div className="sjmlm_bucket"></div>
-            </div>
-            <Feed data={ this.props.post.__recent || [] } />
-            <List />
-          </section>
-        </article>
+        <main>
+          { output }
+        </main>
       );
-    } );
-
-    return (
-      <main>
-        { output }
-      </main>
-    );
+    }
   }
 
   componentWillMount() {

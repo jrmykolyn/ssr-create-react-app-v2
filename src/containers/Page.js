@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+// Components
+import { Loader } from '../components';
+
 import * as pageActions from '../actions/page'
 
 import * as wordpressApi from '../wordpressApi';
@@ -14,33 +17,34 @@ class Page extends Component {
   }
 
   render() {
-    let slug = '';
-    let page = {};
+    let slug = this.props.match.params.slug || '';
+    let page = null;
+    let output;
 
-    // ...
-    try {
-      // ...
-      slug = this.props.match.params.slug;
+    if ( slug ) {
+      page = this.props.page[ slug ] || null;
 
-      // ...
-      page = Object.keys( this.props.page )
-        .filter( ( pageSlug ) => { return pageSlug === slug; } )
-        .map( ( pageSlug ) => { return this.props.page[ pageSlug ]; } )
-        .reduce( ( a, b ) => { return { ...a, ...b }; }, {} );
-    } catch ( err ) {
-      /// TODO
+      if ( page ) {
+        output = (
+          <section className="page-wrapper">
+            <section className="page-header">
+              <h1>{ page.post_title }</h1>
+            </section>
+            <section className="page-body">
+              <div className="page-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
+              </div>
+            </section>
+            <section className="page-footer"></section>
+          </section>
+        );
+      } else {
+        output = <Loader />
+      }
     }
 
     return (
       <main>
-        <section className="page-header">
-          <h1>{ page.post_title }</h1>
-        </section>
-        <section className="page-body">
-          <div className="page-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
-          </div>
-        </section>
-        <section className="page-footer"></section>
+        { output }
       </main>
     );
   }

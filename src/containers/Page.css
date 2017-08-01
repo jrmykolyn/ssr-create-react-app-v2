@@ -1,9 +1,18 @@
+.page-wrapper {
+
+}
+
 .page-header {
   padding-top: 3rem;
   font-size: 2rem;
 }
 
+.page-header > *:last-child {
+  margin-bottom: 0;
+}
+
 .page-body {
+  margin-bottom: 6rem;
   padding-top: 2rem;
 }
 
@@ -11,6 +20,6 @@
 
 }
 
-[class*="page"] * {
-  /*color: red;*/
+.page-body__inner > *:last-child {
+  margin-bottom: 0;
 }
