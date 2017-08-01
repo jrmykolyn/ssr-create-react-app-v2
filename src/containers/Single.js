@@ -119,16 +119,12 @@ class Single extends Component {
   }
 
   componentDidMount() {
-    console.log( 'INSIDE `Single#componentDidMount()`' ); /// TEMP
+    this.props.app.services.dfp.refreshAds();
   }
 
   componentWillReceiveProps() {
     // console.log( 'INSIDE `Single#componentWillReceiveProps()`' ); /// TEMP
   }
-
-  // shouldComponentUpdate() {
-  //   console.log( 'INSIDE `Single#shouldComponentUpdate()`' ); /// TEMP
-  // }
 
   componentWillUpdate() {
     // console.log( 'INSIDE `Single#componentWillUpdate()`' ); /// TEMP
