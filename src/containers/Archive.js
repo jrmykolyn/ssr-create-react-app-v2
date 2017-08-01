@@ -140,8 +140,6 @@ export class Archive extends Component {
   }
 
   componentWillUnmount() {
-    console.log( 'INSIDE `componentWillUnmount()`' ); /// TEMP
-
     window.removeEventListener( 'scroll', this.boundHandleScroll );
   }
 
@@ -171,20 +169,18 @@ export class Archive extends Component {
   }
 
   handleScroll() {
-    console.log( 'INSIDE `handleScroll()`' ); /// TEMP
-
     try {
       let winHeight = window.innerHeight;
       let winScroll = window.pageYOffset;
       let docHeight = document.body.clientHeight;
 
-      if ( ( docHeight - ( winHeight + winScroll ) ) <= winHeight ) {
+      if ( ( docHeight - ( winHeight + winScroll ) ) <= ( winHeight * 2 ) ) {
         if ( !this.props.archive.__loadMore ) {
           this.props.archiveActions.initLoadMore( this.props.match.params.slug );
         }
       }
     } catch ( err ) {
-      /// TOD
+      /// TODO
     }
   }
 }
