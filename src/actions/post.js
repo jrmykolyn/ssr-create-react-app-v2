@@ -33,3 +33,10 @@ export function removeActive() {
     type: 'POST_REMOVE_ACTIVE',
   }
 }
+
+export function setRecent( payload ) {
+  return {
+    type: 'POST_SET_RECENT',
+    payload,
+  }
+}

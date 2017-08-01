@@ -109,6 +109,10 @@ export function fetchPosts() {
   return fetch( { requestType: 'posts', endpoint: 'posts' } );
 }
 
+export function fetchRecentPosts( params ) {
+  return fetch( { requestType: 'posts', endpoint: 'x/posts', params: params } );
+}
+
 export function fetchPost( id ) {
   if ( !id ) {
     return Promise.reject( new Error( '`fetchPost()` INVOKED WITH A MISSING OR INVALID `id`.' ) );

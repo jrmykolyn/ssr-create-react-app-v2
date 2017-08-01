@@ -16,7 +16,7 @@ export class Header extends Component {
     let showSearchBar = ( this.props.searchBar && this.props.searchBar.isActive );
 
     return(
-      <header>
+      <header className="header">
         <div className="header__upper">
           <Menu data={ this.props.secondaryMenu } menuType="secondary" />
         </div>

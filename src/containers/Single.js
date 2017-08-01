@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 
 // Components
-import { Socials } from '../components';
+import { Socials, Feed } from '../components';
 
 // Utils
 import { stringUtils, mediaUtils, postUtils } from '../utils';
@@ -36,8 +36,6 @@ class Single extends Component {
   }
 
   render() {
-    console.log( 'INSIDE `Single#render()`' ); /// TEMP
-
     let slug = '';
     let posts = [];
     let output = '';
@@ -78,7 +76,9 @@ class Single extends Component {
             <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
             </div>
           </section>
-          <section className="post-footer"></section>
+          <section className="post-footer">
+            <Feed data={ this.props.post.__recent || [] } />
+          </section>
         </article>
       );
     } );
@@ -126,7 +126,19 @@ class Single extends Component {
   }
 
   componentDidUpdate() {
-    // console.log( 'INSIDE `Single#componentDidUpdate()`' ); /// TEMP
+    /// TODO - Ensure that `fetchRecentPosts()` does not fire more than once.
+    if ( !this.props.post.__recent ) {
+      wordpressApi.fetchRecentPosts( { postsPerPage: 3 } )
+        .then( ( response ) => {
+          return JSON.parse( response.payload );
+        } )
+        .then( ( payload ) => {
+          this.props.postActions.setRecent( payload );
+        } )
+        .catch( ( err ) => {
+          /// TODO
+        } );
+    }
 
     if ( this.props.post.__loadMore ) {
       let { category, slug } = this.props.match.params;
@@ -212,11 +224,12 @@ class Single extends Component {
 }
 
 const mapStateToProps = ( state ) => ( {
-  post: state.post
+  post: state.post,
+  recent: state.recent,
 } );
 
 const mapDispatchToProps = ( dispatch ) => ( {
-  postActions: bindActionCreators( postActions, dispatch )
+  postActions: bindActionCreators( postActions, dispatch ),
 } );
 
 export default connect(

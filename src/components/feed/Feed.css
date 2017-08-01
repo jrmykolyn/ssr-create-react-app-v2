@@ -1,0 +1,22 @@
+.feed-wrapper {
+  width: 100%;
+  height: auto;
+  margin: 3rem 0;
+  padding: 0;
+}
+
+.feed-wrapper__header {
+  width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.feed-wrapper__body {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}

@@ -1,6 +1,7 @@
 const initialState = {
   __loadMore: false,
   __activePost: null,
+  __recent: null,
 };
 
 export default function reducer( state=initialState, action ) {
@@ -27,6 +28,8 @@ export default function reducer( state=initialState, action ) {
       return { ...state, ...{ __activePost: action.payload } };
     case 'POST_REMOVE_ACTIVE':
       return { ...state, ...{ __activePost: null } };
+    case 'POST_SET_RECENT':
+      return { ...state, ...{ __recent: action.payload } };
     default:
       return state
   }

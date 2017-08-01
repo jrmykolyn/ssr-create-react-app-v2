@@ -1,0 +1,63 @@
+
+.feed-item {
+  width: 32%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background: #FFF;
+  box-shadow: 0 0.3rem 2rem -0.5rem rgba( 0,0,0,0.2 );
+  margin: 0;
+  font-size: 1rem;
+}
+
+.feed-item a:hover {
+  text-decoration: underline;
+}
+
+.feed-item:nth-child( 3n - 1 ) {
+  margin: 0 2%;
+}
+
+.feed-item__header {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.feed-item__header img {
+  /*
+    `*: *!important` temporarily required in order to override inline WP styles.
+  */
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+.feed-item__body {
+  padding: 2rem;
+}
+
+/* TYPE */
+.feed-item-text--category {
+  font-size: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+.feed-item-text--title {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 0.3em;
+}
+
+.feed-item-text--author {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+.feed-item-text--excerpt {
+  font-size: 1.4em;
+}
