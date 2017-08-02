@@ -1,3 +1,4 @@
+export * from './array-utils';
 export * from './media-utils';
 export * from './post-utils';
 export * from './route-utils';
