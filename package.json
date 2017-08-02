@@ -30,6 +30,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "styles": "node-sass ./src/ -o ./src/ --output-style=expanded",
-    "styles:watch": "npm run styles && node-sass ./src -o ./src --watch --recursive"
+    "styles:watch": "npm run styles && node-sass ./src -o ./src --watch --recursive --output-style=expanded"
   }
 }
