@@ -32,7 +32,8 @@ body * {
 
 main {
   width: 94%;
-  max-width: 96rem;
+  max-width: 102.4rem;
+  /* 1024px / 10px = 102.4rem */
   margin: 0 auto;
   padding: 0;
 }
