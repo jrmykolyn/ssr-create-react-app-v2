@@ -47,10 +47,11 @@ function checkFetch( componentRef ) {
  * NOTE:
  * - Function *always* provides a list of 'excludes' when fetching new data.
  */
-function getCategoryPosts( componentRef ) {
+function getCategoryPosts( componentRef, params={} ) {
   let slug = componentRef.props.match.params.slug;
   let excludes = getExcludes( componentRef.props.archive[ slug ] || [] );
-  let params = { excludes };
+
+  params = { ...params, ...{ excludes } };
 
   return new Promise( ( resolve, reject ) => {
     wordpressApi.fetchPostsByCategory( slug, params )
@@ -78,7 +79,7 @@ export class Archive extends Component {
 
     // // Map extracted posts to components.
     let posts = archivePosts.reduce( ( a, b, i ) => {
-      if ( i === 0 || ( i + 1 ) % 5 === 0 ) {
+      if ( i === 0 || ( i ) % 6 === 0 ) {
          a.push( [ b ] )
        } else {
         a[ a.length - 1 ].push( b )
@@ -88,15 +89,30 @@ export class Archive extends Component {
 
     }, [] )
     .map( ( postArr, i ) => {
+      // ...
       let postPreviewMarkup = postArr
         .map( ( post, j ) => {
-          return <PostPreview key={ j } data={ post } />
+          if ( i === 0 && j === 0 ) {
+            return <PostPreview key={ j } data={ post } modifier="hero" />
+          } else if ( j === 0 ) {
+            // FIXME
+            return <PostPreview key={ j } data={ post } modifier="large" />
+          } else if ( j === 1 || j === 2 ) {
+            return <PostPreview key={ j } data={ post } modifier="supporting" />
+          } else {
+            return <PostPreview key={ j } data={ post } />
+          }
         } );
 
+      // ...
       return (
         <section className="post-batch" key={ i }>
-          { postPreviewMarkup }
-          <div className="sjmlm_bucket"></div>
+          <div className="post-batch__posts">
+            { postPreviewMarkup }
+          </div>
+          <div className="post-batch__ads">
+            <div className="sjmlm_bucket"></div>
+          </div>
         </section>
       );
     } );
@@ -115,12 +131,11 @@ export class Archive extends Component {
   }
 
   componentWillMount() {
-    // Create 'bound' version of `handleScroll` callback.
-    // Required so that function:
-    // - Has access to component reference via `this`.
-    // - Can be removed within `componentWillUnmount()`.
-
     if ( !this.props.staticContext && !this.boundHandleScroll ) {
+      // Create 'bound' version of `handleScroll` callback.
+      // Required so that function:
+      // - Has access to component reference via `this`.
+      // - Can be removed within `componentWillUnmount()`.
       this.boundHandleScroll = this.handleScroll.bind( this );
 
       // ...
@@ -129,7 +144,7 @@ export class Archive extends Component {
 
     /// TODO[@jmykolyn] - Look into whether this can be removed (exact same logic exists in `componentDidUpdate()`)?
     if ( checkFetch( this ) ) {
-      getCategoryPosts( this )
+      getCategoryPosts( this, { postsPerPage: 12 } )
         .then( ( response ) => {
           this.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
         } )
@@ -147,7 +162,7 @@ export class Archive extends Component {
     /// TODO[@jmykolyn] - Look into whether or not we need to do this in all cases?
     /// TODO[@jmykolyn] - Look into whether this can be removed (exact same logic exists in `componentWillMount()`)?
     if ( checkFetch( this ) ) {
-      getCategoryPosts( this )
+      getCategoryPosts( this, { postsPerPage: 12 } )
        .then( ( response ) => {
           this.props.archiveActions.update( JSON.parse( response.payload ), response.slug );
         } )
@@ -158,7 +173,7 @@ export class Archive extends Component {
 
     // Check for presence of `__loadMore`, fetch additional posts if required.
     if ( this.props.archive.__loadMore ) {
-      getCategoryPosts( this )
+      getCategoryPosts( this, { postsPerPage: 12 } )
         .then( ( response ) => {
           this.props.archiveActions.resolveLoadMore( JSON.parse( response.payload ), response.slug );
         } )

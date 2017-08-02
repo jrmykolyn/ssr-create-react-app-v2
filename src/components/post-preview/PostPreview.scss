@@ -1,0 +1,183 @@
+// --------------------------------------------------
+// VARIABLES
+// --------------------------------------------------
+// Add any SASS variables that are specific to this file here.
+$gutter-width: 2%;
+
+// --------------------------------------------------
+// PLACEHOLDERS
+// --------------------------------------------------
+%post-preview--base {
+  width: 33.333333%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  margin-bottom: $gutter-width * 2;
+  padding: 0 ( $gutter-width / 2 ); /// TMEP
+
+  // Pseudo elems.
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+%post-preview-hero--base {
+  width: 100%;
+  height: auto;
+  padding-top: 66.666666%;
+  position: relative;
+}
+
+%post-preview-hero-image--base {
+  /*
+    `*: *!important` temporarily required in order to override inline WP styles.
+  */
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+%post-preview-header--base {
+  padding: 2rem;
+  background: #FFF;
+  box-shadow: 0rem 0.3rem 2rem -0.3rem rgba( 0, 0, 0, 0.2 );
+  flex-grow: 1;
+
+  // Positional styles
+  &:not( :first-child ) {
+    padding-top: 2rem;
+  }
+
+  // Descendants
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+
+    font-size: 1em;
+    text-transform: uppercase;
+  }
+}
+
+// --------------------------------------------------
+// SELECTORS
+// --------------------------------------------------
+.post-batch {
+  display: block;
+}
+
+.post-batch__posts {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  // Pseudo elems.
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+.post-preview {
+  @extend %post-preview--base;
+}
+
+.post-preview__hero {
+  // Descendants
+  img {
+     @extend %post-preview-hero-image--base;
+  }
+}
+
+.post-preview__header {
+  @extend %post-preview-header--base;
+}
+
+.post-preview__body {
+
+}
+
+.post-preview__footer {
+
+}
+
+/* VARIANT: HERO */
+.post-preview--hero {
+  @extend %post-preview--base;
+
+  width: 100%;
+}
+
+
+.post-preview--hero__hero {
+  width: 100vw;
+  height: auto;
+  display: block;
+  margin-left: calc( ( 100vw - 100% ) / 2 * -1 );
+
+  // Descendants
+  img {
+    @extend %post-preview-hero-image--base;
+  }
+}
+
+.post-preview--hero__header {
+  @extend %post-preview-header--base;
+}
+
+
+/* VARIANT: LARGE */
+.post-preview--large {
+  @extend %post-preview--base;
+
+  width: 100%;
+}
+
+
+.post-preview--large__hero {
+  img {
+    @extend %post-preview-hero-image--base;
+  }
+}
+
+.post-preview--large__header {
+  @extend %post-preview-header--base;
+}
+
+/* VARIANT: SUPPORTING */
+.post-preview--supporting {
+  @extend %post-preview--base;
+
+  width: 50%;
+}
+
+
+.post-preview--supporting__hero {
+  @extend %post-preview-hero--base;
+
+  // Descendants
+  img {
+    @extend %post-preview-hero-image--base;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    object-fit: cover;
+  }
+}
+
+.post-preview--supporting__header {
+  @extend %post-preview-header--base;
+}

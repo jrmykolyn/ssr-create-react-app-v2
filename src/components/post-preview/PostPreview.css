@@ -1,48 +1,103 @@
-.post-preview {
+.post-preview, .post-preview--hero, .post-preview--large, .post-preview--supporting {
+  width: 33.333333%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  margin-bottom: 4%;
+  padding: 0 1%;
+}
+
+.post-preview::after, .post-preview--hero::after, .post-preview--large::after, .post-preview--supporting::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.post-preview--supporting__hero {
   width: 100%;
   height: auto;
-  display: block;
-  background: #FFF;
-  box-shadow: 0rem 0.3rem 2rem -0.3rem rgba( 0, 0, 0, 0.2 );
-  padding: 2rem;
-  font-size: 1.6rem;
+  padding-top: 66.666666%;
+  position: relative;
 }
 
-.post-preview:not( :last-child ) {
-  margin-bottom: 2rem;
-}
-
-.post-preview__hero {
-
-}
-
-.post-preview__hero img {
+.post-preview__hero img, .post-preview--hero__hero img, .post-preview--large__hero img, .post-preview--supporting__hero img {
   /*
     `*: *!important` temporarily required in order to override inline WP styles.
   */
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
+  display: block;
 }
 
-.post-preview__header {
-
+.post-preview__header, .post-preview--hero__header, .post-preview--large__header, .post-preview--supporting__header {
+  padding: 2rem;
+  background: #FFF;
+  box-shadow: 0rem 0.3rem 2rem -0.3rem rgba(0, 0, 0, 0.2);
+  flex-grow: 1;
 }
 
-.post-preview__header:not( :first-child ) {
+.post-preview__header:not(:first-child), .post-preview--hero__header:not(:first-child), .post-preview--large__header:not(:first-child), .post-preview--supporting__header:not(:first-child) {
   padding-top: 2rem;
 }
 
-.post-preview__header h1 {
+.post-preview__header > *:last-child, .post-preview--hero__header > *:last-child, .post-preview--large__header > *:last-child, .post-preview--supporting__header > *:last-child {
+  margin-bottom: 0;
+}
+
+.post-preview__header h1, .post-preview--hero__header h1, .post-preview--large__header h1, .post-preview--supporting__header h1 {
   font-size: 1.5em;
 }
 
-.post-preview__header h2 {
+.post-preview__header h2, .post-preview--hero__header h2, .post-preview--large__header h2, .post-preview--supporting__header h2 {
   margin-bottom: 1rem;
-
   font-size: 1em;
   text-transform: uppercase;
 }
 
-.post-preview__footer {
+.post-batch {
+  display: block;
+}
 
+.post-batch__posts {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.post-batch__posts::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* VARIANT: HERO */
+.post-preview--hero {
+  width: 100%;
+}
+
+.post-preview--hero__hero {
+  width: 100vw;
+  height: auto;
+  display: block;
+  margin-left: calc( ( 100vw - 100% ) / 2 * -1);
+}
+
+/* VARIANT: LARGE */
+.post-preview--large {
+  width: 100%;
+}
+
+/* VARIANT: SUPPORTING */
+.post-preview--supporting {
+  width: 50%;
+}
+
+.post-preview--supporting__hero img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  object-fit: cover;
 }
