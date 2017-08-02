@@ -13,10 +13,10 @@ import * as archiveActions from '../actions/archive'
 import * as wordpressApi from '../wordpressApi';
 
 // Components
-import { PostPreview, Loader } from '../components';
+import { PostBatch, PostPreview, Loader } from '../components';
 
 // Utils
-import { stringUtils } from '../utils';
+import { stringUtils, arrayUtils } from '../utils';
 
 // Styles
 import './Archive.css';
@@ -76,49 +76,17 @@ export class Archive extends Component {
 
     // Extract the correspondng posts from the `archive` data; fall back to empty array.
     let archivePosts = ( this.props.archive && this.props.archive[ slug ] ) ? this.props.archive[ slug ] : [];
+    let postBatches = arrayUtils.arrayToMatrix( archivePosts, 6 );
 
-    // // Map extracted posts to components.
-    let posts = archivePosts.reduce( ( a, b, i ) => {
-      if ( i === 0 || ( i ) % 6 === 0 ) {
-         a.push( [ b ] )
-       } else {
-        a[ a.length - 1 ].push( b )
-       }
-
-      return a;
-
-    }, [] )
-    .map( ( postArr, i ) => {
-      // ...
-      let postPreviewMarkup = postArr
-        .map( ( post, j ) => {
-          if ( i === 0 && j === 0 ) {
-            return <PostPreview key={ j } data={ post } modifier="hero" />
-          } else if ( j === 0 ) {
-            // FIXME
-            return <PostPreview key={ j } data={ post } modifier="large" />
-          } else if ( j === 1 || j === 2 ) {
-            return <PostPreview key={ j } data={ post } modifier="supporting" />
-          } else {
-            return <PostPreview key={ j } data={ post } />
-          }
-        } );
-
-      // ...
+    // Map extracted posts to components.
+    let postBatchMarkup = postBatches.map( ( batch, i ) => {
       return (
-        <section className="post-batch" key={ i }>
-          <div className="post-batch__posts">
-            { postPreviewMarkup }
-          </div>
-          <div className="post-batch__ads">
-            <div className="sjmlm_bucket"></div>
-          </div>
-        </section>
+        <PostBatch data={ batch } key={ i } />
       );
     } );
 
     // Assign `output` to account for possibility that `posts` does not exist or is invalid.
-    let output = ( Array.isArray( posts ) && posts.length ) ? posts : <Loader />;
+    let output = ( Array.isArray( postBatchMarkup ) && postBatchMarkup.length ) ? postBatchMarkup : <Loader />;
 
     return (
       <main className="archive-wrapper">

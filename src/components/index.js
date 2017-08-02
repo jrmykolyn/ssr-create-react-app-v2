@@ -4,6 +4,7 @@ export * from './header';
 export * from './list';
 export * from './loader';
 export * from './menu';
+export * from './post-batch';
 export * from './post-preview';
 export * from './search-result';
 export * from './socials';
