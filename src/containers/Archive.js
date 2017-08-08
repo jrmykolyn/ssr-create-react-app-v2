@@ -13,7 +13,7 @@ import * as archiveActions from '../actions/archive'
 import * as wordpressApi from '../wordpressApi';
 
 // Components
-import { PostBatch, PostPreview, Loader } from '../components';
+import { PostBatch, Loader } from '../components';
 
 // Utils
 import { stringUtils, arrayUtils } from '../utils';
