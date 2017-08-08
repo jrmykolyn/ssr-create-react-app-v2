@@ -33,10 +33,6 @@ function getPostSlug( componentRef ) {
 // DEFINE CLASS
 // --------------------------------------------------
 class Single extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     let slug = '';
     let posts = [];

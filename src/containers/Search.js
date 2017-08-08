@@ -46,10 +46,6 @@ function extractSearchResults( componentRef ) {
 // DEFINE CLASS
 // --------------------------------------------------
 class Search extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     let resultsArr = extractSearchResults( this );
     let resultsPosts = resultsArr.map( ( result, i ) => {
