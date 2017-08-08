@@ -12,10 +12,6 @@ import * as wordpressApi from '../wordpressApi';
 import './Page.css'
 
 class Page extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     let slug = this.props.match.params.slug || '';
     let page = null;
