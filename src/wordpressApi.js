@@ -17,6 +17,7 @@ const { WORDPRESS_API_CONFIG } = API_CONFIG; /// TEMP
 // --------------------------------------------------
 // DECLARE FUNCTIONS
 // --------------------------------------------------
+/// TODO[@jrmykolyn] - Rename function to prevent conflicts with Browser API `fetch()`.
 function fetch( opts={}  ) {
   return new Promise( ( resolve, reject ) => {
     let { params={} } = opts;
@@ -27,7 +28,7 @@ function fetch( opts={}  ) {
       path: `/${WORDPRESS_API_CONFIG.path}/${WORDPRESS_API_CONFIG.api}/${opts.endpoint}?${paramsString}`,
     };
 
-    let request = http.get( options, ( response ) => {
+    http.get( options, ( response ) => {
       response.setEncoding('utf8');
 
       let payload = '';
