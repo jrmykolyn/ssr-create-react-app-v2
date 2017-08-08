@@ -120,3 +120,7 @@ export function fetchPost( id ) {
 
   return fetch( { requestType: 'post', endpoint: `posts/${id}` } );
 }
+
+export function fetchPopularPosts() {
+  return fetch( { requestType: 'posts', endpoint: `x/popular` } );
+}
