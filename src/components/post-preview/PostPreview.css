@@ -127,6 +127,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  object-fit: cover;
 }
 
 .post-preview--hero__header {
