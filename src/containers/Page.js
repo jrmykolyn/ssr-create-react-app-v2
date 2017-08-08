@@ -27,8 +27,7 @@ class Page extends Component {
               <h1>{ page.post_title }</h1>
             </section>
             <section className="page-body">
-              <div className="page-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } }>
-              </div>
+              <div className="page-body__inner" dangerouslySetInnerHTML={ { __html: page.post_content } } />
             </section>
             <section className="page-footer"></section>
           </section>
