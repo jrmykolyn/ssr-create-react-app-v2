@@ -67,6 +67,38 @@ function parseQueryString( queryString ) {
     }, {} );
 }
 
+/**
+ * ...
+ */
+function parseWpLink( link ) {
+  let data = {
+    isExternal: ( link.object === 'custom' ),
+    parsedUrl: parseWpLinkUrl( link.url || '' ),
+  }
+
+  return { ...link, ...data };
+}
+
+/**
+ * ...
+ */
+function parseWpLinkUrl( url ) {
+  url = ( url && typeof url === 'string' ) ? url : '';
+
+  if ( !url ) {
+    return '/';
+  }
+
+  // Remove protocol and host from URL.
+  let pattern = /((https?:\/\/).*?\/)/gmi;
+  let parsedUrl = url.replace( pattern, '' );
+
+  // Determine 'type' of request (eg. `page`, `post`, etc.).
+  /// TODO
+
+  return ( parsedUrl.substring( 0, 1 ) === '/' ) ? parsedUrl : `/${parsedUrl}`;
+}
+
 // --------------------------------------------------
 // PUBLIC API
 // --------------------------------------------------
@@ -74,4 +106,6 @@ export const routeUtils = {
   parseQueryString,
   queryStringifyParams,
   queryStringifyArray,
+  parseWpLink,
+  parseWpLinkUrl,
 }

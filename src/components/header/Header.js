@@ -21,6 +21,8 @@ export class Header extends Component {
           <Menu data={ this.props.secondaryMenu } menuType="secondary" />
         </div>
         <div className="header__inner">
+          <div className="nav-toggle-wrap" onClick={ this.toggleDrawerNav.bind( this ) }>
+          </div>
           <div className="logo-wrap">
             <a href="#">
               <img className="logo" src="/assets/logos/ottawa-logo-base.svg" alt="#" />
@@ -47,7 +49,7 @@ export class Header extends Component {
                 </li>
               </ul>
             </div>
-            <div className="search-toggle" onClick={ this.toggle.bind( this ) }>
+            <div className="search-toggle" onClick={ this.toggleSearch.bind( this ) }>
               <img src="/assets/icons/search-open.png" alt="#" />
             </div>
           </div>
@@ -56,7 +58,7 @@ export class Header extends Component {
               <input type="text" name="q" />
               <input type="submit" value="" />
             </form>
-            <div className="search-toggle" onClick={ this.toggle.bind( this ) }>
+            <div className="search-toggle" onClick={ this.toggleSearch.bind( this ) }>
               <img src="/assets/icons/search-close.png" alt="#" />
             </div>
           </div>
@@ -65,7 +67,11 @@ export class Header extends Component {
     );
   }
 
-  toggle() {
+  toggleSearch() {
     this.props.toggleSearch();
+  }
+
+  toggleDrawerNav() {
+    this.props.toggleDrawerNav();
   }
 }

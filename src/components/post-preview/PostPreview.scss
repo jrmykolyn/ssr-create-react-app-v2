@@ -15,6 +15,7 @@ $gutter-width: 2%;
   font-size: 1.6rem;
   margin-bottom: $gutter-width * 2;
   padding: 0 ( $gutter-width / 2 ); /// TMEP
+  position: relative;
 
   // Pseudo elems.
   &::after {
@@ -29,6 +30,8 @@ $gutter-width: 2%;
   height: auto;
   padding-top: 66.666666%;
   position: relative;
+
+  animation: fade 1s forwards;
 }
 
 %post-preview-hero-image--base {
@@ -90,9 +93,29 @@ $gutter-width: 2%;
 
 .post-preview {
   @extend %post-preview--base;
+
+  width: 100%;
+  flex-direction: row;
+  align-items: flex-start;
+  font-size: 1rem;
+
+  // Media queries
+  @media ( min-width: 860px ) {
+    width: 33.333333%;
+    flex-direction: column;
+  }
 }
 
 .post-preview__hero {
+  width: 30%;
+  height: auto;
+  flex-grow: 0;
+
+  // Media queries
+  @media ( min-width: 860px ) {
+    width: 100%;
+  }
+
   // Descendants
   img {
      @extend %post-preview-hero-image--base;
@@ -101,6 +124,13 @@ $gutter-width: 2%;
 
 .post-preview__header {
   @extend %post-preview-header--base;
+
+  width: 70%;
+
+  // Media queries
+  @media ( min-width: 860px ) {
+    width: 100%;
+  }
 }
 
 .post-preview__body {
@@ -120,19 +150,44 @@ $gutter-width: 2%;
 
 
 .post-preview--hero__hero {
+  @extend %post-preview-hero--base;
+
   width: 100vw;
   height: auto;
   display: block;
   margin-left: calc( ( 100vw - 100% ) / 2 * -1 );
+  padding-top: 56.25%; /* 16:9 aspect */
 
   // Descendants
   img {
     @extend %post-preview-hero-image--base;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
   }
 }
 
 .post-preview--hero__header {
   @extend %post-preview-header--base;
+
+  margin-top: -2.5rem;
+  position: relative;
+
+  // Media queries
+  @media ( min-width: 768px ) {
+    font-size: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  @media ( min-width: 992px ) {
+    font-size: 2.5rem;
+  }
+
+  @media ( min-width: 1200px ) {
+    margin-top: -5rem;
+  }
 }
 
 
@@ -159,8 +214,8 @@ $gutter-width: 2%;
   @extend %post-preview--base;
 
   width: 50%;
+  font-size: 1.2rem;
 }
-
 
 .post-preview--supporting__hero {
   @extend %post-preview-hero--base;

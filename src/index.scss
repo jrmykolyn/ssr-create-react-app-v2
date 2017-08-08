@@ -63,3 +63,25 @@ figure {
 img {
   max-width: 100%;
 }
+
+.page-content {
+  transition: transform 0.25s;
+  transform: translateX( 0 );
+
+  // Supplementary classes
+  &.drawer-nav-active {
+
+    @media ( max-width: 859px ) {
+      transform: translateX( calc( 100vw - 8rem ) );
+    }
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

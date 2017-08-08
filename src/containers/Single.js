@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 
 // Components
-import { Socials, Feed, List, Loader } from '../components';
+import { Socials, Feed, List, Loader, SingleHero } from '../components';
 
 // Utils
 import { stringUtils, mediaUtils, postUtils } from '../utils';
@@ -64,20 +64,19 @@ class Single extends Component {
     // If no `posts`, render loader component.
     if ( !Array.isArray( posts ) || !posts.length ) {
       return(
-        <main>
+        <main className="single-wrapper">
           <Loader />
         </main>
       )
     } else {
       output = posts.map( ( post, i ) => {
-        let postHero = ( post.thumbnail ) ? ( <section className="single-hero" dangerouslySetInnerHTML={ { __html: post.thumbnail } }></section> ) : '';
         let postSlug = stringUtils.handleize( post.post_name );
         let socialMediaData = ( !this.props.staticContext ) ? mediaUtils.extractSocialMediaData( post ) : [];
 
         // ...
         return (
           <article key={ i } data-single-slug={postSlug} ref={ (elem) => { this.props.post[ slug ][ i ].__ref = elem; } }>
-            { postHero }
+            <SingleHero post={ post } />
             <section className="single-header">
               <h1>{ post.post_title }</h1>
             </section>
@@ -91,14 +90,13 @@ class Single extends Component {
                 <div className="sjmlm_bucket"></div>
               </div>
               <Feed data={ this.props.post.__recent || [] } />
-              <List />
             </section>
           </article>
         );
       } );
 
       return (
-        <main>
+        <main className="single-wrapper">
           { output }
         </main>
       );
@@ -129,7 +127,22 @@ class Single extends Component {
   }
 
   componentDidMount() {
+    // ...
     this.props.app.services.dfp.refreshAds();
+
+    // NOTE - Logic below responsible for fetching 'popular' posts.
+    /// TODO[@jmykolyn] - Revisit. Implement or remove.
+    /*
+    if ( !this.staticContext && ( !this.props.post || !this.props.post.__popular ) ) {
+      wordpressApi.fetchPopularPosts()
+        .then( ( response ) => {
+          this.props.postActions.setPopular( response.payload );
+        } )
+        .catch( ( err ) => {
+          console.log( err ); /// TEMP
+        } );
+    }
+    */
   }
 
   componentWillReceiveProps() {

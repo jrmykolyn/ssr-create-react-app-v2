@@ -1,0 +1,23 @@
+.single-hero {
+  width: 100vw;
+  height: auto;
+  display: block;
+  margin-left: calc( ( ( 100vw - 100% ) / 2 ) * -1);
+  padding-top: 56.25%; /* 16:9 aspect */
+  position: relative;
+
+  animation: fade 1s forwards;
+}
+
+.single-hero img {
+  /*
+    `*: *!important` temporarily required in order to override inline WP styles.
+  */
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

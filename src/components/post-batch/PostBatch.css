@@ -1,0 +1,9 @@
+.post-batch {
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 860px) {
+  .post-batch {
+    margin-bottom: 6rem;
+  }
+}

@@ -2,6 +2,7 @@ const initialState = {
   menus: {},
   services: {},
   searchBar: {},
+  drawerNav: {},
 };
 
 export default function reducer( state=initialState, action ) {
@@ -16,9 +17,15 @@ export default function reducer( state=initialState, action ) {
       return { ...state, ...{ services: mergedServices } };
     case 'APP_TOGGLE_SEARCH_BAR':
       // Capture current `isActive` value, cast as boolean.
-      let currVal = !!( state && state.searchBar && state.searchBar.isActive );
+      let searchBarIsActive = !!( state && state.searchBar && state.searchBar.isActive );
 
-      return { ...state, ...{ searchBar: { isActive: !currVal } } };
+      return { ...state, ...{ searchBar: { isActive: !searchBarIsActive } } };
+    case 'APP_TOGGLE_DRAWER_NAV':
+      let drawerNavIsActive = !!( state && state.drawerNav && state.drawerNav.isActive );
+
+      return { ...state, ...{ drawerNav: { isActive: !drawerNavIsActive } } };
+    case 'APP_CLOSE_DRAWER_NAV':
+      return { ...state, ...{ drawerNav: { isActive: false } } };
     default:
       return state
   }

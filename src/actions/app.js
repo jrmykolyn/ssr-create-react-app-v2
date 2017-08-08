@@ -17,3 +17,15 @@ export function updateServices( payload ) {
     payload,
   };
 }
+
+export function toggleDrawerNav() {
+  return {
+    type: 'APP_TOGGLE_DRAWER_NAV',
+  };
+}
+
+export function closeDrawerNav() {
+  return {
+    type: 'APP_CLOSE_DRAWER_NAV',
+  };
+}

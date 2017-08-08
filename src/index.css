@@ -64,3 +64,23 @@ figure {
 img {
   max-width: 100%;
 }
+
+.page-content {
+  transition: transform 0.25s;
+  transform: translateX(0);
+}
+
+@media (max-width: 859px) {
+  .page-content.drawer-nav-active {
+    transform: translateX(calc( 100vw - 8rem));
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

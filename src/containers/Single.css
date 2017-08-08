@@ -1,32 +1,38 @@
-.single-hero {
-  width: 100vw;
-  height: auto;
-  display: block;
-  margin-left: calc( ((100vw - 100%) / 2 ) * -1 );
+.single-wrapper {
+  font-size: 4vw;
 }
 
-.single-hero img {
-  /*
-    `*: *!important` temporarily required in order to override inline WP styles.
-  */
-  width: 100% !important;
-  height: auto !important;
-  display: block;
+/* /// TEMP */
+@media (min-width: 480px) {
+  .single-wrapper {
+    font-size: 3vw;
+  }
+}
+
+@media (min-width: 768px) {
+  .single-wrapper {
+    font-size: 2vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .single-wrapper {
+    font-size: 2rem;
+  }
 }
 
 .single-header {
   padding-top: 3rem;
-  font-size: 2rem;
+  font-size: 1.75em;
 }
 
 .single-header h1 {
-  font-size: 2em;
   line-height: 1.2;
 }
 
 .single-body {
   margin-bottom: 6rem;
-  font-size: 1.6rem;
+  font-size: 1em;
 }
 
 .single-body__inner img {
@@ -53,16 +59,16 @@
   text-transform: uppercase;
 }
 
-.single-body__inner figure figcaption:not( :first-child ) {
+.single-body__inner figure figcaption:not(:first-child) {
   margin-top: 2rem;
 }
 
 .single-footer {
   margin-bottom: 6rem;
+}
 
-  > *:last-child {
-    margin-bottom: 0;
-  }
+.single-footer > *:last-child {
+  margin-bottom: 0;
 }
 
 .ad-wrapper--single {
@@ -71,7 +77,7 @@
   display: block;
   background: #EEE;
   margin: 0;
-  margin-left: calc( ( 100vw - 100% ) / 2 * -1 );
+  margin-left: calc( ( 100vw - 100% ) / 2 * -1);
   padding: 2rem 0;
 }
 

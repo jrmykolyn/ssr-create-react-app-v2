@@ -1,3 +1,4 @@
+export * from './drawer-nav';
 export * from './feed';
 export * from './footer';
 export * from './header';
@@ -7,4 +8,5 @@ export * from './menu';
 export * from './post-batch';
 export * from './post-preview';
 export * from './search-result';
+export * from './single-hero';
 export * from './socials';

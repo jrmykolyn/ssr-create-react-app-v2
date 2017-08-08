@@ -10,7 +10,7 @@ import Page from './Page';
 import Archive from './Archive';
 import Search from './Search';
 import NoMatch from '../components/NoMatch'
-import { Footer, Header, Menu } from '../components'
+import { Footer, Header, Menu, DrawerNav } from '../components'
 
 import * as appActions from '../actions/app';
 
@@ -23,9 +23,13 @@ const { MENU_CONFIG } = CONFIG;
 
 class App extends Component {
   render() {
+    // Data
     let primaryMenuData = [];
     let secondaryMenuData = [];
+    let mobileMenuData = [];
+
     let searchBar = {};
+    let drawerNav = {};
 
     // ...
     if ( !this.props.staticContext && ( !this.props.app.services || !this.props.app.services.dfp ) ) {
@@ -37,23 +41,28 @@ class App extends Component {
       // `menus` should be an object, where the value @ each key is an array of menu items.
       primaryMenuData = this.props.app.menus[ MENU_CONFIG.primary || 'primary' ] || [];
       secondaryMenuData = this.props.app.menus[ MENU_CONFIG.secondary || 'secondary' ] || [];
+      mobileMenuData = this.props.app.menus[ MENU_CONFIG.mobile || 'mobile' ] || [];
       searchBar = this.props.app.searchBar;
+      drawerNav = this.props.app.drawerNav;
     } catch ( err ) {
       /// TODO[@jrmykolyn] - Handle error... or don't?
     }
 
     return (
-      <div>
-        <Header toggleSearch={ this.toggleSearch.bind( this ) } searchBar={ searchBar } primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route path="/search/" component={Search} />
-          <Route path="/category/:slug" component={Archive} />
-          <Route path="/:category/:slug" component={Single} />
-          <Route path="/:slug" component={Page} />
-          <Route component={NoMatch}/>
-        </Switch>
-        <Footer></Footer>
+      <div className="app-content">
+        <div className={ 'page-content ' + ( drawerNav && drawerNav.isActive ? 'drawer-nav-active' : '' ) }>
+          <Header toggleSearch={ this.toggleSearch.bind( this ) } toggleDrawerNav={ this.toggleDrawerNav.bind( this ) } searchBar={ searchBar } primaryMenu={ primaryMenuData } secondaryMenu={ secondaryMenuData }></Header>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/search/" component={Search} />
+            <Route path="/category/:slug" component={Archive} />
+            <Route path="/:category/:slug" component={Single} />
+            <Route path="/:slug" component={Page} />
+            <Route component={NoMatch}/>
+          </Switch>
+          <Footer></Footer>
+        </div>
+        <DrawerNav data={ mobileMenuData } drawerNav={ drawerNav } closeDrawerNav={ this.closeDrawerNav.bind( this ) } />
       </div>
     );
   }
@@ -77,6 +86,14 @@ class App extends Component {
 
   toggleSearch() {
     this.props.appActions.toggleSearchBar();
+  }
+
+  toggleDrawerNav() {
+   this.props.appActions.toggleDrawerNav();
+  }
+
+  closeDrawerNav() {
+   this.props.appActions.closeDrawerNav();
   }
 }
 
