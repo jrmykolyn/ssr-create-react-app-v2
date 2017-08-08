@@ -13,13 +13,13 @@ export class DrawerNav extends Component {
 
       if ( linkData.isExternal ) {
         return (
-          <li>
+          <li key={ link.ID || i }>
             <a href={ link.url }>{ link.title || '' }</a>
           </li>
         );
       } else {
         return (
-          <li>
+          <li key={ link.ID || i }>
             <Link to={ linkData.parsedUrl } onClick={ this.props.closeDrawerNav.bind( this ) }>{ link.title || '' }</Link>
           </li>
         );
