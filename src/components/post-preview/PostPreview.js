@@ -1,14 +1,10 @@
 // Vendor
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 // Components
 import { PostPreviewHero } from './PostPreviewHero';
 import { PostPreviewHeader } from './PostPreviewHeader';
 import { PostPreviewBody } from './PostPreviewBody';
-
-// Utils
-import { stringUtils } from '../../utils';
 
 import './PostPreview.css'
 

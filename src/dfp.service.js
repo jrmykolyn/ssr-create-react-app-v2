@@ -231,8 +231,8 @@ export class DfpService {
           wrapperElem.classList.add( 'sjm-dfp-rendered' );
 
           //enforce hide_on_render rules
-          var domElemId = e.slot.getSlotId().getDomId();
-          var elem = document.getElementById( domElemId );
+          // var domElemId = e.slot.getSlotId().getDomId();
+          // var elem = document.getElementById( domElemId );
           // var data = elem.dataset[ 'sjm-dfp-slot' ];
 
           // if( data.hide_on_render ) {

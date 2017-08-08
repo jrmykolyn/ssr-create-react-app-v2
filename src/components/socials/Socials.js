@@ -1,6 +1,5 @@
 // Vendor
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 // Components
 import { Loader } from '../';

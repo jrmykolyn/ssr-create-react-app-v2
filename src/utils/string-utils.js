@@ -20,7 +20,7 @@ function dehandleize( str ) {
     return str;
   }
 
-  str = str.replace( /\-/gmi, ' ' );
+  str = str.replace( /-/gmi, ' ' );
 
   return str;
 }

@@ -16,9 +16,9 @@ const { GOOGLE_CUSTOM_SEARCH_API_CONFIG } = API_CONFIG; /// TEMP
 // --------------------------------------------------
 export function search( query ) {
   return new Promise( ( resolve, reject ) => {
-    let { hostname, path, key, cx } = GOOGLE_CUSTOM_SEARCH_API_CONFIG;
+    let { hostname, path, cx } = GOOGLE_CUSTOM_SEARCH_API_CONFIG;
 
-    let request = http.get( `https://${hostname}/${path}?cx=${cx}&q=${query}`, ( response ) => {
+    http.get( `https://${hostname}/${path}?cx=${cx}&q=${query}`, ( response ) => {
       response.setEncoding('utf8');
 
       let payload = '';

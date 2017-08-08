@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 
 // Components
-import { Socials, Feed, List, Loader, SingleHero } from '../components';
+import { Socials, Feed, Loader, SingleHero } from '../components';
 
 // Utils
 import { stringUtils, mediaUtils, postUtils } from '../utils';
@@ -16,7 +14,7 @@ import * as postActions from '../actions/post'
 // APIs/Services
 import * as wordpressApi from '../wordpressApi';
 
-import './Single.css'
+import './Single.css';
 
 // --------------------------------------------------
 // DECLARE FUNCTIONS
@@ -78,8 +76,7 @@ class Single extends Component {
             </section>
             <section className="single-body">
               <Socials data={ socialMediaData } />
-              <div className="single-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } }>
-              </div>
+              <div className="single-body__inner" dangerouslySetInnerHTML={ { __html: post.post_content } } />
             </section>
             <section className="single-footer">
               <div className="ad-wrapper--single">
@@ -239,7 +236,7 @@ class Single extends Component {
             let aOffset = a.__ref.getBoundingClientRect().top;
             let bOffset = b.__ref.getBoundingClientRect().top;
 
-            return ( a.offset > b.offset ) ? a : ( a.offset < b.offset ) ? b : b;
+            return ( aOffset > bOffset ) ? a : ( aOffset < bOffset ) ? b : b;
           } );
 
         // Update `__activePost` if applicable.
