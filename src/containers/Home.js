@@ -16,8 +16,7 @@ export class Home extends Component {
           <h1>{ this.props.home.post_title }</h1>
         </section>
         <section className="post-body">
-          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: this.props.home.post_content } }>
-          </div>
+          <div className="post-body__inner" dangerouslySetInnerHTML={ { __html: this.props.home.post_content } } />
         </section>
         <section className="post-footer"></section>
       </main>
