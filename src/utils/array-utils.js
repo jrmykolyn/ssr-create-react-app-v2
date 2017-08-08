@@ -16,7 +16,7 @@ function arrayToMatrix( arr, len ) {
     return [];
   }
 
-  if ( typeof len !== 'number' || parseInt( len ) !== len ) {
+  if ( typeof len !== 'number' || parseInt( len, 10 ) !== len ) {
     /// TODO - Log msg.
     return [];
   }

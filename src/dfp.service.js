@@ -184,7 +184,7 @@ export class DfpService {
 
             var ad;
 
-            if ( typeof slot.oop === 'string' && parseInt( slot.oop ) === 1 ) {
+            if ( typeof slot.oop === 'string' && parseInt( slot.oop, 10 ) === 1 ) {
               ad = window.googletag.defineOutOfPageSlot( dfp_slot, divid ).addService( window.googletag.pubads() );
             } else {
               ad = window.googletag.defineSlot( dfp_slot, sizes, divid ).addService( window.googletag.pubads() );
