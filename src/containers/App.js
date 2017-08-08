@@ -10,7 +10,7 @@ import Page from './Page';
 import Archive from './Archive';
 import Search from './Search';
 import NoMatch from '../components/NoMatch'
-import { Footer, Header, Menu, DrawerNav } from '../components'
+import { Footer, Header, DrawerNav } from '../components'
 
 import * as appActions from '../actions/app';
 
