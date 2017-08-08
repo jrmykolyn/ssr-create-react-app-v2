@@ -2,6 +2,7 @@ const initialState = {
   __loadMore: null,
   __activePost: null,
   __recent: null,
+  __popular: null,
 };
 
 export default function reducer( state=initialState, action ) {
@@ -32,6 +33,8 @@ export default function reducer( state=initialState, action ) {
       return { ...state, ...{ __activePost: null } };
     case 'POST_SET_RECENT':
       return { ...state, ...{ __recent: action.payload } };
+    case 'POST_SET_POPULAR':
+      return { ...state, ...{ __popular: action.payload } };
     default:
       return state
   }

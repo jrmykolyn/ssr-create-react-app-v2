@@ -46,3 +46,10 @@ export function setRecent( payload ) {
     payload,
   }
 }
+
+export function setPopular( payload ) {
+  return {
+    type: 'POST_SET_POPULAR',
+    payload,
+  }
+}
