@@ -1,6 +1,5 @@
 // Vendor
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 // Components
 import { Menu } from '../menu';
@@ -24,7 +23,7 @@ export class Header extends Component {
           <div className="nav-toggle-wrap" onClick={ this.toggleDrawerNav.bind( this ) }>
           </div>
           <div className="logo-wrap">
-            <a href="#">
+            <a href="/">
               <img className="logo" src="/assets/logos/ottawa-logo-base.svg" alt="#" />
             </a>
           </div>
@@ -33,17 +32,17 @@ export class Header extends Component {
             <div className="socials-wrap">
               <ul className="socials-list">
                 <li>
-                  <a href="#">
+                  <a href="//google.ca">
                     <img src="/assets/icons/header_facebook.svg" alt="#" />
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="//google.ca">
                     <img src="/assets/icons/header_twitter.svg" alt="#" />
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="//google.ca">
                     <img src="/assets/icons/header_instagram.svg" alt="#" />
                   </a>
                 </li>
